@@ -260,7 +260,7 @@ def _node_style(n, th):
     elif sh == "external":
         base.update(rounded=0, strokeWidth=2.5)
     elif sh == "store":
-        return dict({"shape": "partialRectangle", "right": 0, "top": 1, "bottom": 1, "left": 1},
+        return dict({"shape": "partialRectangle", "right": 1, "top": 1, "bottom": 1, "left": 1},
                     **dict(base, strokeWidth=1.5))
     elif sh == "cylinder":
         return dict({"shape": "cylinder3", "boundedLbl": 1, "backgroundOutline": 1, "size": 7}, **base)

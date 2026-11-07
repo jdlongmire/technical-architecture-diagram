@@ -50,7 +50,7 @@
     <mxCell id="n_release" value="&lt;span style=&quot;font-size:10px;color:#52606D&quot;&gt;&lt;i&gt;«process»&lt;/i&gt;&lt;/span&gt;&lt;br&gt;&lt;b&gt;Release Review&lt;/b&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#3E4C59;strokeWidth=1.25;fontSize=12;fontFamily=Helvetica;fontColor=#1F2933;verticalAlign=middle;align=center;spacing=4;rounded=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="c_corp">
      <mxGeometry x="14.00" y="101.00" width="118.00" height="44.00" as="geometry" />
     </mxCell>
-    <mxCell id="n_pubstore" value="&lt;b&gt;Released Products&lt;/b&gt;" style="shape=partialRectangle;right=0;top=1;bottom=1;left=1;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#3E4C59;strokeWidth=1.5;fontSize=12;fontFamily=Helvetica;fontColor=#1F2933;verticalAlign=middle;align=center;spacing=4;" vertex="1" parent="c_corp">
+    <mxCell id="n_pubstore" value="&lt;b&gt;Released Products&lt;/b&gt;" style="shape=partialRectangle;right=1;top=1;bottom=1;left=1;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#3E4C59;strokeWidth=1.5;fontSize=12;fontFamily=Helvetica;fontColor=#1F2933;verticalAlign=middle;align=center;spacing=4;" vertex="1" parent="c_corp">
      <mxGeometry x="336.00" y="104.00" width="128.00" height="38.00" as="geometry" />
     </mxCell>
     <mxCell id="n_ingest" value="&lt;span style=&quot;font-size:10px;color:#52606D&quot;&gt;&lt;i&gt;«process»&lt;/i&gt;&lt;/span&gt;&lt;br&gt;&lt;b&gt;Ingest Telemetry&lt;/b&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#3E4C59;strokeWidth=1.25;fontSize=12;fontFamily=Helvetica;fontColor=#1F2933;verticalAlign=middle;align=center;spacing=4;rounded=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="c_proc_zone">
@@ -65,13 +65,13 @@
     <mxCell id="n_products" value="&lt;span style=&quot;font-size:10px;color:#52606D&quot;&gt;&lt;i&gt;«process»&lt;/i&gt;&lt;/span&gt;&lt;br&gt;&lt;b&gt;Generate Products&lt;/b&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#3E4C59;strokeWidth=1.25;fontSize=12;fontFamily=Helvetica;fontColor=#1F2933;verticalAlign=middle;align=center;spacing=4;rounded=1;arcSize=16;absoluteArcSize=1;" vertex="1" parent="c_proc_zone">
      <mxGeometry x="355.00" y="117.00" width="135.00" height="44.00" as="geometry" />
     </mxCell>
-    <mxCell id="n_raw" value="&lt;b&gt;Raw Frames&lt;/b&gt;" style="shape=partialRectangle;right=0;top=1;bottom=1;left=1;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#3E4C59;strokeWidth=1.5;fontSize=12;fontFamily=Helvetica;fontColor=#1F2933;verticalAlign=middle;align=center;spacing=4;" vertex="1" parent="c_store_zone">
+    <mxCell id="n_raw" value="&lt;b&gt;Raw Frames&lt;/b&gt;" style="shape=partialRectangle;right=1;top=1;bottom=1;left=1;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#3E4C59;strokeWidth=1.5;fontSize=12;fontFamily=Helvetica;fontColor=#1F2933;verticalAlign=middle;align=center;spacing=4;" vertex="1" parent="c_store_zone">
      <mxGeometry x="54.00" y="172.00" width="96.00" height="38.00" as="geometry" />
     </mxCell>
-    <mxCell id="n_eng" value="&lt;b&gt;Engineering Data&lt;/b&gt;" style="shape=partialRectangle;right=0;top=1;bottom=1;left=1;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#3E4C59;strokeWidth=1.5;fontSize=12;fontFamily=Helvetica;fontColor=#1F2933;verticalAlign=middle;align=center;spacing=4;" vertex="1" parent="c_store_zone">
+    <mxCell id="n_eng" value="&lt;b&gt;Engineering Data&lt;/b&gt;" style="shape=partialRectangle;right=1;top=1;bottom=1;left=1;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#3E4C59;strokeWidth=1.5;fontSize=12;fontFamily=Helvetica;fontColor=#1F2933;verticalAlign=middle;align=center;spacing=4;" vertex="1" parent="c_store_zone">
      <mxGeometry x="54.00" y="104.00" width="119.00" height="38.00" as="geometry" />
     </mxCell>
-    <mxCell id="n_alarms" value="&lt;b&gt;Alarm Log&lt;/b&gt;" style="shape=partialRectangle;right=0;top=1;bottom=1;left=1;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#3E4C59;strokeWidth=1.5;fontSize=12;fontFamily=Helvetica;fontColor=#1F2933;verticalAlign=middle;align=center;spacing=4;" vertex="1" parent="c_store_zone">
+    <mxCell id="n_alarms" value="&lt;b&gt;Alarm Log&lt;/b&gt;" style="shape=partialRectangle;right=1;top=1;bottom=1;left=1;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#3E4C59;strokeWidth=1.5;fontSize=12;fontFamily=Helvetica;fontColor=#1F2933;verticalAlign=middle;align=center;spacing=4;" vertex="1" parent="c_store_zone">
      <mxGeometry x="54.00" y="36.00" width="96.00" height="38.00" as="geometry" />
     </mxCell>
     <mxCell id="n_operator" value="&lt;b&gt;Flight Operator&lt;/b&gt;" style="shape=umlActor;verticalLabelPosition=bottom;labelPosition=center;html=1;whiteSpace=nowrap;fillColor=#FFFFFF;strokeColor=#3E4C59;strokeWidth=1.25;fontSize=12;fontFamily=Helvetica;fontColor=#1F2933;verticalAlign=top;align=center;spacing=4;" vertex="1" parent="c_ops">

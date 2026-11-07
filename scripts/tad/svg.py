@@ -162,7 +162,7 @@ def _node(n, th):
                  f'stroke-width="{sw}"/>')
     elif sh == "store":
         o.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{fill}" stroke="none"/>')
-        o.append(f'<path d="M{x + w},{y} H{x} V{y + h} H{x + w}" fill="none" stroke="{stroke}" stroke-width="1.5"/>')
+        o.append(f'<path d="M{x + w},{y} H{x} V{y + h} H{x + w} V{y}" fill="none" stroke="{stroke}" stroke-width="1.5"/>')
     elif sh == "actor":
         cx = x + w / 2
         o.append(f'<circle cx="{cx}" cy="{y + 7}" r="6" fill="{fill}" stroke="{stroke}" stroke-width="{sw}"/>')
