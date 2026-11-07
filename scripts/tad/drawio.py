@@ -137,6 +137,8 @@ def page_from_scene(sc):
 
     if sc.get("table"):
         _table(pg, sc, th)
+        if sc.get("title_block"):
+            _title_block(pg, sc["title_block"], th)
         return pg.diagram
 
     absb = {}
@@ -253,7 +255,23 @@ def page_from_scene(sc):
                    "fillColor": "#FFFBEA", "strokeColor": "#CBD2D9", "verticalAlign": "top", "align": "left",
                    "spacingLeft": 8, "spacingTop": 2, "fontSize": L.FONT_LEGEND, "fontFamily": th["font"],
                    "fontColor": _h(th["text"])}, nb["x"], nb["y"], nb["w"], nb["h"])
+    if sc.get("title_block"):
+        _title_block(pg, sc["title_block"], th)
     return pg.diagram
+
+
+def _title_block(pg, tb, th):
+    for i, c in enumerate(tb["cells"]):
+        value = f'<span style="font-size:7px;color:{_h(th["muted"])}">{hesc(c["label"])}</span>'
+        if c["value"]:
+            v = f"<b>{hesc(c['value'])}</b>" if c["title"] else hesc(c["value"])
+            value += f'<br><span style="font-size:{12 if c["title"] else 10}px">{v}</span>'
+        pg.vertex(f"tb{i}", value,
+                  {"rounded": 0, "html": 1, "whiteSpace": "wrap",
+                   "fillColor": "#F0F4F8" if c["title"] else "#FFFFFF", "strokeColor": "#9AA5B1",
+                   "verticalAlign": "top", "align": "left", "spacingLeft": 4, "spacingTop": 1,
+                   "fontSize": 10, "fontFamily": th["font"], "fontColor": _h(th["text"])},
+                  c["x"], c["y"], c["w"], c["h"])
 
 
 def _anchor(prefix, pt, b):

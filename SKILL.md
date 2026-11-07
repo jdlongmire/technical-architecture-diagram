@@ -43,7 +43,7 @@ Copy the template (for example to `spec.json`) and replace every `<<...>>` with 
 7. **Labels:** short and specific. An edge label has at most three lines: label, data, protocol/port. Put long detail in the interface table rather than on the line.
 8. **Delete** template items you have no content for. Never leave `<<...>>`.
 9. **Density:** more than about 40 nodes on one page gets hard to read. Add `views`: a full view plus summary views that `collapse` containers, filter `edge_types`, or `include` one area.
-10. **Provenance:** every diagram gets a frame header from its metadata (`id`, `context`, `owner`, `version`, `status`, `sources`). `interface` and `dataflow` specs are strict by default: those fields are required, external elements need `owner` and `source_ref`, and boundary-crossing flows need a `marking`. Other kinds are light. Full rules: `reference/provenance_profile.md`.
+10. **Provenance:** every diagram gets a frame header from its metadata (`id`, `context`, `owner`, `version`, `status`, `sources`). `interface` and `dataflow` specs are strict by default: those fields are required, external elements need `owner` and `source_ref`, boundary-crossing flows need a `marking`, and a generated title block is drawn (set `title_block` to override). Other kinds are light and draw no title block by default. Full rules: `reference/provenance_profile.md`.
 
 Before the first build, check the spec and see the limits:
 ```

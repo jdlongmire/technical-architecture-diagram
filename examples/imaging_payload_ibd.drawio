@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<mxfile host="technical-architecture-diagram" agent="tad 0.2.0" version="24.0.0" type="device">
- <diagram name="Overview" id="Overview" tad_kind="ibd" tad_provenance="light">
+<mxfile host="technical-architecture-diagram" agent="tad 0.3.0" version="24.0.0" type="device">
+ <diagram name="Overview" id="Overview" tad_kind="ibd" tad_provenance="light" tad_title_block="off">
   <mxGraphModel dx="0" dy="0" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1670" pageHeight="539" math="0" shadow="0">
    <root>
     <mxCell id="0" />

@@ -59,6 +59,24 @@ diagram properties, and the build report records the spec hash and
 tool version, so a rendered page can be traced back to the exact
 spec that produced it.
 
+## Generated title block
+
+The released-sheet layer: a title block in the engineering drawing
+manner, drawn at the bottom right of every page and generated
+entirely from the spec metadata above. It is **on by default in
+strict mode and off in light mode**; a spec overrides either way
+with `"title_block": true` or `false`.
+
+Cells: title; diagram id, context, owner, organization; version,
+status, date, marking; sheet (page n of m), scale (always NTS:
+these diagrams are not to scale), and the source ids. Approval
+cells (prepared by, checked by, approved by, from the optional
+`prepared_by`, `checked_by`, `approved_by` fields) appear only when
+the spec supplies them; the tool never invents an approver or a
+date, so a missing `date` leaves the date cell blank. Revision
+history itself stays with the repository; the version cell carries
+the current revision.
+
 ## Element provenance
 
 Nodes and containers may carry:

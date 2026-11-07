@@ -8,6 +8,7 @@
   "owner": "Mission operations (example)",
   "version": "1.0",
   "status": "approved",
+  "date": "2026-11-07",
   "sources": [
     {"id": "SEC-REV-001", "title": "Security review baseline (fictional)"}
   ],

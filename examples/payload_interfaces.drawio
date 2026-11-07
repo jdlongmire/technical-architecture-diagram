@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<mxfile host="technical-architecture-diagram" agent="tad 0.2.0" version="24.0.0" type="device">
- <diagram name="Overview" id="Overview" tad_kind="interface" tad_provenance="strict" tad_id="TAD-EX-IF-001" tad_context="Imaging Payload (fictional example)" tad_owner="Payload project office (example)" tad_version="1.0" tad_status="approved" tad_sources="ICD-PAY-001">
-  <mxGraphModel dx="0" dy="0" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1548" pageHeight="832" math="0" shadow="0">
+<mxfile host="technical-architecture-diagram" agent="tad 0.3.0" version="24.0.0" type="device">
+ <diagram name="Overview" id="Overview" tad_kind="interface" tad_provenance="strict" tad_title_block="on" tad_id="TAD-EX-IF-001" tad_context="Imaging Payload (fictional example)" tad_owner="Payload project office (example)" tad_version="1.0" tad_status="approved" tad_sources="ICD-PAY-001">
+  <mxGraphModel dx="0" dy="0" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1548" pageHeight="942" math="0" shadow="0">
    <root>
     <mxCell id="0" />
     <mxCell id="1" parent="0" />
@@ -9,7 +9,7 @@
      <mxGeometry x="0.00" y="8.00" width="1548.00" height="22.00" as="geometry" />
     </mxCell>
     <mxCell id="banner1" value="UNCLASSIFIED" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#007A33;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=12;fontFamily=Helvetica;align=center;verticalAlign=middle;locked=1;" vertex="1" parent="1">
-     <mxGeometry x="0.00" y="802.00" width="1548.00" height="22.00" as="geometry" />
+     <mxGeometry x="0.00" y="912.00" width="1548.00" height="22.00" as="geometry" />
     </mxCell>
     <mxCell id="frame" value="tad interface Imaging Payload (fictional example) Payload Processing Interfaces" style="text;html=1;align=left;verticalAlign=top;fontSize=11;fontStyle=1;fontFamily=Helvetica;fontColor=#52606D;whiteSpace=nowrap;" vertex="1" parent="1">
      <mxGeometry x="36.00" y="54.00" width="618.41" height="15.00" as="geometry" />
@@ -310,11 +310,47 @@
     <mxCell id="legend_t7" value="Port / interface point" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;whiteSpace=nowrap;" vertex="1" parent="legend">
      <mxGeometry x="205.61" y="88.00" width="136.40" height="16.00" as="geometry" />
     </mxCell>
+    <mxCell id="tb0" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;TITLE&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;&lt;b&gt;Payload Processing Interfaces&lt;/b&gt;&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#F0F4F8;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="892.00" y="784.00" width="620.00" height="26.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb1" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;DIAGRAM ID&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;TAD-EX-IF-001&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="892.00" y="810.00" width="136.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb2" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;CONTEXT&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;Imaging Payload (fictional example)&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="1028.00" y="810.00" width="186.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb3" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;OWNER&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;Payload project office (example)&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="1214.00" y="810.00" width="161.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb4" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;ORGANIZATION&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="1375.00" y="810.00" width="137.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb5" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;VERSION&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;1.0&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="892.00" y="832.00" width="99.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb6" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;STATUS&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;approved&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="991.00" y="832.00" width="124.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb7" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;DATE&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;2026-11-07&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="1115.00" y="832.00" width="149.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb8" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;MARKING&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;UNCLASSIFIED&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="1264.00" y="832.00" width="248.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb9" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;SHEET&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;1 of 2&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="892.00" y="854.00" width="99.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb10" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;SCALE&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;NTS&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="991.00" y="854.00" width="87.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb11" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;SOURCES&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;ICD-PAY-001&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="1078.00" y="854.00" width="434.00" height="22.00" as="geometry" />
+    </mxCell>
    </root>
   </mxGraphModel>
  </diagram>
- <diagram name="Interfaces" id="Interfaces" tad_kind="interface" tad_provenance="strict" tad_id="TAD-EX-IF-001" tad_context="Imaging Payload (fictional example)" tad_owner="Payload project office (example)" tad_version="1.0" tad_status="approved" tad_sources="ICD-PAY-001">
-  <mxGraphModel dx="0" dy="0" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="783" pageHeight="518" math="0" shadow="0">
+ <diagram name="Interfaces" id="Interfaces" tad_kind="interface" tad_provenance="strict" tad_title_block="on" tad_id="TAD-EX-IF-001" tad_context="Imaging Payload (fictional example)" tad_owner="Payload project office (example)" tad_version="1.0" tad_status="approved" tad_sources="ICD-PAY-001">
+  <mxGraphModel dx="0" dy="0" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="783" pageHeight="628" math="0" shadow="0">
    <root>
     <mxCell id="0" />
     <mxCell id="1" parent="0" />
@@ -322,19 +358,19 @@
      <mxGeometry x="0.00" y="8.00" width="783.00" height="22.00" as="geometry" />
     </mxCell>
     <mxCell id="banner1" value="UNCLASSIFIED" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#007A33;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=12;fontFamily=Helvetica;align=center;verticalAlign=middle;locked=1;" vertex="1" parent="1">
-     <mxGeometry x="0.00" y="488.00" width="783.00" height="22.00" as="geometry" />
+     <mxGeometry x="0.00" y="598.00" width="783.00" height="22.00" as="geometry" />
     </mxCell>
     <mxCell id="frame" value="tad interface Imaging Payload (fictional example) Payload Processing Interfaces" style="text;html=1;align=left;verticalAlign=top;fontSize=11;fontStyle=1;fontFamily=Helvetica;fontColor=#52606D;whiteSpace=nowrap;" vertex="1" parent="1">
-     <mxGeometry x="36.00" y="54.00" width="519.11" height="15.00" as="geometry" />
+     <mxGeometry x="36.00" y="54.00" width="618.41" height="15.00" as="geometry" />
     </mxCell>
     <mxCell id="title" value="Payload Processing Interfaces" style="text;html=1;align=left;verticalAlign=top;fontSize=22;fontStyle=1;fontFamily=Helvetica;fontColor=#102A43;whiteSpace=nowrap;" vertex="1" parent="1">
-     <mxGeometry x="36.00" y="71.00" width="339.11" height="32.00" as="geometry" />
+     <mxGeometry x="36.00" y="71.00" width="438.41" height="32.00" as="geometry" />
     </mxCell>
     <mxCell id="subtitle" value="Interface table (generated from edges)" style="text;html=1;align=left;verticalAlign=top;fontSize=13;fontFamily=Helvetica;fontColor=#52606D;whiteSpace=nowrap;" vertex="1" parent="1">
-     <mxGeometry x="36.00" y="105.00" width="519.11" height="21.00" as="geometry" />
+     <mxGeometry x="36.00" y="105.00" width="618.41" height="21.00" as="geometry" />
     </mxCell>
     <mxCell id="chips" value="Version 1.0 · Status approved" style="text;html=1;align=left;verticalAlign=top;fontSize=10;fontFamily=Helvetica;fontColor=#52606D;whiteSpace=nowrap;" vertex="1" parent="1">
-     <mxGeometry x="36.00" y="124.00" width="519.11" height="16.00" as="geometry" />
+     <mxGeometry x="36.00" y="124.00" width="618.41" height="16.00" as="geometry" />
     </mxCell>
     <mxCell id="viewname" value="View: Interfaces" style="text;html=1;align=right;verticalAlign=top;fontSize=11;fontFamily=Helvetica;fontColor=#52606D;" vertex="1" parent="1">
      <mxGeometry x="487.00" y="81.00" width="260.00" height="18.00" as="geometry" />
@@ -572,6 +608,42 @@
     </mxCell>
     <mxCell id="td11_5" value="" style="html=1;whiteSpace=wrap;fillColor=#F5F7FA;strokeColor=#CBD2D9;align=left;spacingLeft=6;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
      <mxGeometry x="659.00" y="430.00" width="88.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb0" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;TITLE&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px&quot;&gt;&lt;b&gt;Payload Processing Interfaces&lt;/b&gt;&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#F0F4F8;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="127.00" y="470.00" width="620.00" height="26.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb1" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;DIAGRAM ID&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;TAD-EX-IF-001&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="127.00" y="496.00" width="136.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb2" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;CONTEXT&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;Imaging Payload (fictional example)&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="263.00" y="496.00" width="186.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb3" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;OWNER&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;Payload project office (example)&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="449.00" y="496.00" width="161.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb4" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;ORGANIZATION&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="610.00" y="496.00" width="137.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb5" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;VERSION&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;1.0&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="127.00" y="518.00" width="99.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb6" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;STATUS&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;approved&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="226.00" y="518.00" width="124.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb7" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;DATE&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;2026-11-07&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="350.00" y="518.00" width="149.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb8" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;MARKING&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;UNCLASSIFIED&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="499.00" y="518.00" width="248.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb9" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;SHEET&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;2 of 2&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="127.00" y="540.00" width="99.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb10" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;SCALE&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;NTS&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="226.00" y="540.00" width="87.00" height="22.00" as="geometry" />
+    </mxCell>
+    <mxCell id="tb11" value="&lt;span style=&quot;font-size:7px;color:#52606D&quot;&gt;SOURCES&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;font-size:10px&quot;&gt;ICD-PAY-001&lt;/span&gt;" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#9AA5B1;verticalAlign=top;align=left;spacingLeft=4;spacingTop=1;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
+     <mxGeometry x="313.00" y="540.00" width="434.00" height="22.00" as="geometry" />
     </mxCell>
    </root>
   </mxGraphModel>

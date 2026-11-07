@@ -445,9 +445,67 @@ def chips_line(spec):
     return " · ".join(chips) if chips else None
 
 
+TB_TITLE_H = 26
+TB_ROW_H = 22
+
+
+def _fit(text, size, w, bold=False):
+    """Truncate text with an ellipsis so it fits one cell of width w."""
+    t = str(text or "")
+    if T.width(t, size, bold) <= w:
+        return t
+    while t and T.width(t + "…", size, bold) > w:
+        t = t[:-1]
+    return (t + "…") if t else ""
+
+
+def make_title_block(spec, avail_w):
+    """Generated release title block (provenance profile), or None when off.
+
+    Returns {w, h, cells} with cell coordinates relative to the block origin;
+    the caller positions x/y. Every value comes from spec metadata; approval
+    cells appear only when the spec supplies them, and nothing is invented.
+    """
+    if not spec.get("title_block"):
+        return None
+    w = round(max(300, min(620, avail_w)))
+    cells = []
+    y = 0
+
+    def row(h, parts):
+        nonlocal y
+        x = 0
+        for i, (frac, label, value, is_title) in enumerate(parts):
+            cw = w - x if i == len(parts) - 1 else round(w * frac)
+            size = 12 if is_title else 10
+            cells.append(dict(dx=x, dy=y, w=cw, h=h, label=label,
+                              value=_fit(value, size, cw - 8, bold=is_title), title=is_title))
+            x += cw
+        y += h
+
+    row(TB_TITLE_H, [(1.0, "TITLE", spec["title"], True)])
+    row(TB_ROW_H, [(0.22, "DIAGRAM ID", spec.get("id"), False),
+                   (0.30, "CONTEXT", spec.get("context"), False),
+                   (0.26, "OWNER", spec.get("owner"), False),
+                   (0.22, "ORGANIZATION", spec.get("organization"), False)])
+    row(TB_ROW_H, [(0.16, "VERSION", spec.get("version"), False),
+                   (0.20, "STATUS", spec.get("status"), False),
+                   (0.24, "DATE", spec.get("date"), False),
+                   (0.40, "MARKING", spec.get("marking"), False)])
+    row(TB_ROW_H, [(0.16, "SHEET", spec.get("_sheet") or "1 of 1", False),
+                   (0.14, "SCALE", "NTS", False),
+                   (0.70, "SOURCES", ", ".join(s["id"] for s in spec.get("sources", [])), False)])
+    if any(spec.get(k) for k in ("prepared_by", "checked_by", "approved_by")):
+        row(TB_ROW_H, [(0.34, "PREPARED BY", spec.get("prepared_by"), False),
+                       (0.33, "CHECKED BY", spec.get("checked_by"), False),
+                       (0.33, "APPROVED BY", spec.get("approved_by"), False)])
+    return dict(w=w, h=y, cells=cells)
+
+
 def scene_meta(spec):
     """Spec metadata embedded into the .drawio file (the digital title block)."""
     meta = OrderedDict(kind=spec["kind"], provenance=spec.get("provenance", "light"))
+    meta["title_block"] = "on" if spec.get("title_block") else "off"
     for k in ("id", "context", "owner", "version", "status"):
         if spec.get(k):
             meta[k] = spec[k]
@@ -624,6 +682,18 @@ def _scene(spec, view, containers, nodes, edges, direction, label_edges):
         sc["notes_box"] = nb
         height = nb["y"] + nb["h"]
         width = max(width, nb["x"] + nb["w"] + MARGIN)
+
+    # Generated title block (provenance profile): bottom-right release block.
+    tb = make_title_block(spec, width - 2 * MARGIN)
+    if tb:
+        tb["x"] = max(left, round(width - MARGIN - tb["w"]))
+        tb["y"] = height + 18
+        for c in tb["cells"]:
+            c["x"] = tb["x"] + c["dx"]
+            c["y"] = tb["y"] + c["dy"]
+        sc["title_block"] = tb
+        height = tb["y"] + tb["h"]
+        width = max(width, tb["x"] + tb["w"] + MARGIN)
     height += MARGIN + (BANNER_H + 8 if spec.get("marking") else 0)
     sc["width"], sc["height"] = round(width), round(height)
     return sc
@@ -736,9 +806,21 @@ def table_scene(spec, base_scene):
                      containers=[], nodes=[], edges=[])
     tw = sum(c[2] for c in cols)
     sc["table"] = dict(x=MARGIN, y=top, cols=cols, rows=rows, row_h=rh, w=tw, h=rh * (len(rows) + 1))
-    sc["title_w"] = T.width(spec["title"], L.FONT_TITLE, bold=True)
+    sc["title_w"] = max(T.width(spec["title"], L.FONT_TITLE, bold=True),
+                        T.width(frame_line(spec), 11, bold=True))
     sc["width"] = round(max(MARGIN * 2 + tw, MARGIN * 2 + sc["title_w"]))
-    sc["height"] = round(top + rh * (len(rows) + 1) + MARGIN + (BANNER_H + 8 if spec.get("marking") else 0))
+    bottom = top + rh * (len(rows) + 1)
+    tb = make_title_block(spec, tw)
+    if tb:
+        tb["x"] = MARGIN + max(0, tw - tb["w"])
+        tb["y"] = bottom + 18
+        for c in tb["cells"]:
+            c["x"] = tb["x"] + c["dx"]
+            c["y"] = tb["y"] + c["dy"]
+        sc["title_block"] = tb
+        bottom = tb["y"] + tb["h"]
+        sc["width"] = max(sc["width"], round(tb["x"] + tb["w"] + MARGIN))
+    sc["height"] = round(bottom + MARGIN + (BANNER_H + 8 if spec.get("marking") else 0))
     sc["diagram_box"] = (MARGIN, top, tw, rh * (len(rows) + 1))
     return sc
 

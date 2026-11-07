@@ -80,6 +80,8 @@ def render(sc):
 
     if sc.get("table"):
         o += _table(sc, th)
+        if sc.get("title_block"):
+            o += _title_block(sc["title_block"], th)
         o.append("</svg>")
         return "\n".join(o)
 
@@ -131,8 +133,23 @@ def render(sc):
         o += _legend(sc["legend"], th)
     if sc.get("notes_box"):
         o += _notes(sc["notes_box"], th)
+    if sc.get("title_block"):
+        o += _title_block(sc["title_block"], th)
     o.append("</svg>")
     return "\n".join(o)
+
+
+def _title_block(tb, th):
+    o = []
+    for c in tb["cells"]:
+        fill = "#F0F4F8" if c["title"] else "#FFFFFF"
+        o.append(f'<rect x="{c["x"]:.1f}" y="{c["y"]:.1f}" width="{c["w"]:.1f}" height="{c["h"]:.1f}" '
+                 f'fill="{fill}" stroke="#9AA5B1" stroke-width="1"/>')
+        o.append(_text(c["x"] + 4, c["y"] + 8.5, c["label"], 7, th["muted"]))
+        if c["value"]:
+            o.append(_text(c["x"] + 4, c["y"] + c["h"] - 5, c["value"], 12 if c["title"] else 10,
+                           th["text"], bold=c["title"]))
+    return o
 
 
 def _notes(nb, th):

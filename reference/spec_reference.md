@@ -19,6 +19,10 @@ Numeric limits are not repeated here. See `reference/limits.md` or run `python3 
 | `version` | no | Diagram version, drawn as a header chip. |
 | `status` | no | `draft`, `review`, or `approved`. Drawn as a header chip. Required in strict mode. |
 | `provenance` | no | `light` or `strict` (provenance profile). Defaults to `strict` for `interface` and `dataflow`, `light` otherwise. |
+| `title_block` | no | `true`, `false`, or `auto`: draw the generated title block (provenance profile). Defaults to on in strict mode, off in light. |
+| `organization` | no | Organization named in the title block. |
+| `date` | no | Date shown in the title block, as written (e.g. `2026-11-07`). Never invented: no date field, no date in the block. |
+| `prepared_by`, `checked_by`, `approved_by` | no | Approval names for the title block. The approval row appears only when at least one is set. |
 | `sources` | no | Authority references: a list of `{"id", "title"}` objects (or plain id strings). Embedded in the .drawio file; `trace` targets resolve against it. |
 | `notes` | no | Rationale/problem notes: `{"id", "kind" (rationale\|problem), "anchor" (element id), "text", "show"}`. Drawn in a notes panel only when `show` is true. |
 | `page` | no | `auto` (default), `letter`, `legal`, `tabloid`, `a4`, `a3`, `a2`. With a fixed page, the PDF is scaled to fit and the checker fails the build if the scale would drop below the minimum. |

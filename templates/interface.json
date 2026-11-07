@@ -15,6 +15,7 @@
   "owner": "<<Accountable owner>>",
   "version": "0.1",
   "status": "draft",
+  "date": "<<YYYY-MM-DD>>",
   "sources": [
     {"id": "<<ICD or source id>>", "title": "<<Source title>>"}
   ],

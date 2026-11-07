@@ -8,6 +8,7 @@
   "owner": "Payload project office (example)",
   "version": "1.0",
   "status": "approved",
+  "date": "2026-11-07",
   "sources": [
     {"id": "ICD-PAY-001", "title": "Payload interface control document (fictional)"}
   ],

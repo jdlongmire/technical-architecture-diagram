@@ -104,6 +104,7 @@ def main(argv=None):
     report["tool_version"] = __version__
     report["provenance"] = spec.get("provenance", "light")
     report["provenance_default"] = bool(spec.get("provenance_default"))
+    report["title_block"] = bool(spec.get("title_block"))
 
     issues += SP.content_checks(spec)
     if not T.font_available():
@@ -136,9 +137,11 @@ def main(argv=None):
 
     issues += C.spec_checks(spec)
     views = spec.get("views") or [None]
+    total_pages = len(views) + (1 if spec.get("interface_table") and spec["edges"] else 0)
     scenes = []
     try:
         for vi, v in enumerate(views):
+            spec["_sheet"] = f"{vi + 1} of {total_pages}"
             sc = LY.layout_view(spec, v, issues, "" if vi == 0 else "v")
             issues += C.scene_checks(sc, spec, len(views) > 1)
             scenes.append(sc)
@@ -149,6 +152,7 @@ def main(argv=None):
         _print(report, "INVALID", None, clean_path, fixes, dedupe(issues), None)
         return 2
     if spec.get("interface_table") and spec["edges"]:
+        spec["_sheet"] = f"{total_pages} of {total_pages}"
         scenes.append(LY.table_scene(spec, scenes[0]))
 
     D.write(scenes, a.out)
@@ -207,6 +211,7 @@ def _print(report, result, out, clean, fixes, issues, extras):
     if report.get("provenance"):
         print(f"PROVENANCE: {report['provenance']}"
               + (" (default for kind)" if report.get("provenance_default") else "")
+              + f"  TITLE BLOCK: {'on' if report.get('title_block') else 'off'}"
               + f"  TOOL: tad {report.get('tool_version', '')}  SPEC SHA256: {report.get('spec_sha256', '')[:16]}...")
     for v in report["views"]:
         print(f"VIEW {v['name']!r}: {v['nodes']} nodes, {v['edges']} edges, {v['crossings']} crossings, "

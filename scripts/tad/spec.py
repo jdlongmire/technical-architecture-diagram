@@ -139,7 +139,8 @@ def normalize(raw):
         spec["marking"] = str(m).strip()
 
     # Provenance metadata (reference/provenance_profile.md): the digital title block.
-    for key in ("id", "context", "owner", "version"):
+    for key in ("id", "context", "owner", "version",
+                "organization", "date", "prepared_by", "checked_by", "approved_by"):
         v = _pick(raw, [key], fixes, "spec", key)
         if v not in (None, ""):
             spec[key] = str(v).strip()
@@ -178,6 +179,27 @@ def normalize(raw):
             issues.append(issue("WARNING", f"sources[{j}]", "source must be a string or an object"))
     if sources:
         spec["sources"] = sources
+
+    # Generated title block (provenance profile): on by default in strict mode, off in light.
+    tb = raw.get("title_block")
+    if tb is None:
+        spec["title_block"] = spec["provenance"] == "strict"
+        spec["title_block_default"] = True
+    elif isinstance(tb, bool):
+        spec["title_block"] = tb
+    else:
+        t = str(tb).strip().lower()
+        if t in ("auto", "default"):
+            spec["title_block"] = spec["provenance"] == "strict"
+            spec["title_block_default"] = True
+        elif t in ("on", "true", "yes"):
+            spec["title_block"] = True
+        elif t in ("off", "false", "no"):
+            spec["title_block"] = False
+        else:
+            issues.append(issue("ERROR", "title_block", f"unknown title_block value '{tb}'",
+                                "use true, false or auto"))
+            spec["title_block"] = spec["provenance"] == "strict"
 
     page = str(raw.get("page", "auto")).strip().lower().replace(" ", "")
     if page not in S.PAGE_SIZES:
@@ -682,7 +704,8 @@ def content_checks(spec):
             for k, v in enumerate(x):
                 scan(v, f"{path}[{k}]")
     for key in ("title", "subtitle", "marking", "edges", "views",
-                "id", "context", "owner", "version", "sources", "notes"):
+                "id", "context", "owner", "version", "sources", "notes",
+                "organization", "date", "prepared_by", "checked_by", "approved_by"):
         if key in spec:
             scan(spec[key], key)
     for i, e in enumerate(spec["edges"]):
