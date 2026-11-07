@@ -1,0 +1,25 @@
+// TEMPLATE: SysML-style block definition diagram.
+// Blocks carry compartments: "values", "parts", "references", "operations", "constraints".
+// Edge types: composition (whole -> part, filled diamond at the whole), aggregation,
+// generalization (specific -> general, hollow triangle at the general), association, dependency.
+// Wholes and generals are kept at the top automatically. Use "label" for multiplicity ("1..2").
+{
+  "title": "<<System>> Structure",
+  "subtitle": "<<What the hierarchy covers>>",
+  "kind": "bdd",
+  "nodes": [
+    {"id": "system", "label": "<<System>>", "stereotype": "block", "values": ["<<mass: kg>>"], "operations": ["<<operate()>>"]},
+    {"id": "sub_a", "label": "<<Subsystem A>>", "stereotype": "block"},
+    {"id": "sub_b", "label": "<<Subsystem B>>", "stereotype": "block"},
+    {"id": "abstract", "label": "<<Abstract Part>>", "stereotype": "abstract block"},
+    {"id": "variant1", "label": "<<Variant 1>>", "stereotype": "block"},
+    {"id": "variant2", "label": "<<Variant 2>>", "stereotype": "block"}
+  ],
+  "edges": [
+    {"from": "system", "to": "sub_a", "type": "composition"},
+    {"from": "system", "to": "sub_b", "type": "composition"},
+    {"from": "sub_b", "to": "abstract", "type": "composition", "label": "<<1..2>>"},
+    {"from": "variant1", "to": "abstract", "type": "generalization"},
+    {"from": "variant2", "to": "abstract", "type": "generalization"}
+  ]
+}

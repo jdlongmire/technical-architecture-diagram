@@ -1,0 +1,171 @@
+{
+  "title": "Imaging Payload Internals",
+  "subtitle": "Internal block diagram for a fictional payload: parts, ports and item flows",
+  "kind": "ibd",
+  "containers": [
+    {
+      "id": "env",
+      "label": "Environment",
+      "type": "group",
+      "nodes": [
+        {
+          "id": "bus",
+          "label": "bus : Spacecraft Bus",
+          "ports": [
+            "cmd:E",
+            "tlm:E",
+            "pwr:E",
+            "data:E"
+          ]
+        },
+        {
+          "id": "scene",
+          "label": "scene : Ground Scene",
+          "shape": "external"
+        }
+      ]
+    },
+    {
+      "id": "payload",
+      "label": "Imaging Payload",
+      "type": "system",
+      "stereotype": "block",
+      "nodes": [
+        {
+          "id": "ctl",
+          "label": "ctl : Payload Controller",
+          "ports": [
+            "cmdIn:W",
+            "tlmOut:W",
+            "spwA:E",
+            "spwB:E"
+          ]
+        },
+        {
+          "id": "pdu",
+          "label": "pdu : Power Distribution",
+          "ports": [
+            "pwrIn:W",
+            "p1:E",
+            "p2:E",
+            "p3:N"
+          ]
+        },
+        {
+          "id": "fpa",
+          "label": "fpa : Visible FPA",
+          "ports": [
+            "spw:W",
+            "pwr:S",
+            "pixOut:E"
+          ]
+        },
+        {
+          "id": "thm",
+          "label": "thm : Thermal Controller",
+          "ports": [
+            "spw:W",
+            "pwr:S",
+            "heat:E"
+          ]
+        },
+        {
+          "id": "opt",
+          "label": "opt : Telescope Optics",
+          "ports": [
+            "light:W",
+            "img:E"
+          ]
+        },
+        {
+          "id": "ipu",
+          "label": "ipu : Image Processor",
+          "ports": [
+            "pixIn:W",
+            "dataOut:E"
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "bus.cmd",
+      "to": "ctl.cmdIn",
+      "type": "flow",
+      "data": "Commands"
+    },
+    {
+      "from": "ctl.tlmOut",
+      "to": "bus.tlm",
+      "type": "flow",
+      "data": "Telemetry"
+    },
+    {
+      "from": "bus.pwr",
+      "to": "pdu.pwrIn",
+      "type": "flow",
+      "data": "28 VDC"
+    },
+    {
+      "from": "ctl.spwA",
+      "to": "fpa.spw",
+      "type": "connector",
+      "label": "SpaceWire"
+    },
+    {
+      "from": "ctl.spwB",
+      "to": "thm.spw",
+      "type": "connector",
+      "label": "SpaceWire"
+    },
+    {
+      "from": "pdu.p1",
+      "to": "fpa.pwr",
+      "type": "flow",
+      "data": "12 VDC"
+    },
+    {
+      "from": "pdu.p2",
+      "to": "thm.pwr",
+      "type": "flow",
+      "data": "12 VDC"
+    },
+    {
+      "from": "pdu.p3",
+      "to": "ctl",
+      "type": "flow",
+      "data": "5 VDC"
+    },
+    {
+      "from": "scene",
+      "to": "opt.light",
+      "type": "flow",
+      "data": "Reflected light"
+    },
+    {
+      "from": "opt.img",
+      "to": "fpa",
+      "type": "flow",
+      "data": "Focused image"
+    },
+    {
+      "from": "fpa.pixOut",
+      "to": "ipu.pixIn",
+      "type": "flow",
+      "data": "Pixel data"
+    },
+    {
+      "from": "ipu.dataOut",
+      "to": "bus.data",
+      "type": "flow",
+      "data": "Image files"
+    },
+    {
+      "from": "thm.heat",
+      "to": "fpa",
+      "type": "binding",
+      "label": "temp control"
+    }
+  ]
+}

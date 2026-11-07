@@ -1,0 +1,44 @@
+{
+  "title": "Payload Processing Interfaces",
+  "subtitle": "External and internal interfaces of a fictional imaging payload",
+  "kind": "interface",
+  "marking": "UNCLASSIFIED",
+  "containers": [
+    {"id": "bus", "label": "Spacecraft Bus", "type": "system", "nodes": [
+      {"id": "cdh", "label": "Command and Data Handling", "stereotype": "subsystem",
+       "ports": ["CMD:E", "TLM:E", "1PPS:E"]},
+      {"id": "eps", "label": "Electrical Power", "stereotype": "subsystem", "ports": ["28V:E"]},
+      {"id": "comms", "label": "X-band Transmitter", "stereotype": "subsystem", "ports": ["DATA:E", "RF:S"]}
+    ]},
+    {"id": "payload", "label": "Imaging Payload", "type": "system", "stereotype": "payload", "containers": [
+      {"id": "elec", "label": "Payload Electronics", "type": "subsystem", "nodes": [
+        {"id": "pcu", "label": "Payload Controller", "stereotype": "LRU",
+         "ports": ["CMD:W", "TLM:W", "PPS:W", "SPW1:E", "SPW2:E", "PWR:S"]},
+        {"id": "pdu", "label": "Power Distribution", "stereotype": "LRU", "ports": ["IN:W", "OUT1:E", "OUT2:E", "OUT3:N"]}
+      ]},
+      {"id": "sensor", "label": "Sensor Head", "type": "subsystem", "nodes": [
+        {"id": "fpa", "label": "Focal Plane Array", "stereotype": "LRU", "ports": ["SPW:W", "PWR:S"]},
+        {"id": "thermal", "label": "Thermal Controller", "stereotype": "LRU", "ports": ["SPW:W", "PWR:S"]}
+      ]}
+    ], "nodes": [
+      {"id": "proc", "label": "Image Processor", "stereotype": "LRU", "ports": ["IN:W", "OUT:S"]}
+    ]},
+    {"id": "ground", "label": "Ground Segment", "type": "site", "nodes": [
+      {"id": "gs", "label": "Ground Station", "stereotype": "external", "shape": "external", "ports": ["RF:W"]}
+    ]}
+  ],
+  "edges": [
+    {"from": "cdh.CMD", "to": "pcu.CMD", "type": "interface", "data": "Payload commands", "protocol": "MIL-STD-1553B"},
+    {"from": "pcu.TLM", "to": "cdh.TLM", "type": "interface", "data": "Health telemetry", "protocol": "MIL-STD-1553B"},
+    {"from": "cdh.1PPS", "to": "pcu.PPS", "type": "interface", "data": "Time sync", "protocol": "RS-422"},
+    {"from": "eps.28V", "to": "pdu.IN", "type": "power", "label": "28 VDC unregulated"},
+    {"from": "pdu.OUT3", "to": "pcu.PWR", "type": "power", "label": "5 VDC"},
+    {"from": "pdu.OUT1", "to": "fpa.PWR", "type": "power", "label": "12 VDC"},
+    {"from": "pdu.OUT2", "to": "thermal.PWR", "type": "power", "label": "12 VDC"},
+    {"from": "pcu.SPW1", "to": "fpa.SPW", "type": "bidir", "data": "Imaging control", "protocol": "SpaceWire"},
+    {"from": "pcu.SPW2", "to": "thermal.SPW", "type": "control", "data": "Setpoints", "protocol": "SpaceWire"},
+    {"from": "fpa", "to": "proc.IN", "type": "interface", "data": "Raw image frames", "protocol": "Camera Link"},
+    {"from": "proc.OUT", "to": "comms.DATA", "type": "interface", "data": "Compressed imagery", "protocol": "SpaceWire"},
+    {"from": "comms.RF", "to": "gs.RF", "type": "interface", "data": "Mission data downlink", "protocol": "CCSDS", "port": "X-band"}
+  ]
+}

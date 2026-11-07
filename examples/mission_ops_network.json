@@ -1,0 +1,79 @@
+{
+  "title": "Mission Operations Network",
+  "subtitle": "Deployment view of a fictional ground operations site and its remote antenna",
+  "kind": "network",
+  "edge_types": {
+    "admin": {"label": "Admin / enrollment (two-way)", "dash": "dashed", "color": "muted", "start": "arrow", "end": "arrow", "width": 1}
+  },
+  "marking": "UNCLASSIFIED",
+  "containers": [
+    {"id": "ext", "label": "External", "type": "cloud", "nodes": [
+      {"id": "inet", "label": "Internet", "shape": "external"},
+      {"id": "partner", "label": "Partner Ops Center", "shape": "external"}
+    ]},
+    {"id": "hq", "label": "Operations Site", "type": "site", "containers": [
+      {"id": "dmz", "label": "DMZ", "type": "zone", "nodes": [
+        {"id": "edge_fw", "label": "Edge Firewall", "stereotype": "firewall", "ports": ["wan:W", "dmz:E", "core:S"]},
+        {"id": "vpn", "label": "VPN Concentrator", "stereotype": "appliance", "detail": "10.10.0.5"},
+        {"id": "proxy", "label": "Reverse Proxy", "stereotype": "server", "detail": "10.10.0.20"}
+      ]},
+      {"id": "ops", "label": "Ops Enclave", "type": "enclave", "marking": "CUI", "containers": [
+        {"id": "apps", "label": "Application Zone", "type": "zone", "nodes": [
+          {"id": "mps", "label": "Mission Planning", "stereotype": "app server", "detail": "10.20.1.10"},
+          {"id": "cmd", "label": "Command Server", "stereotype": "app server", "detail": "10.20.1.11"},
+          {"id": "tlm", "label": "Telemetry Processor", "stereotype": "app server", "detail": "10.20.1.12"},
+          {"id": "fdy", "label": "Flight Dynamics", "stereotype": "app server", "detail": "10.20.1.13"}
+        ]},
+        {"id": "data", "label": "Data Zone", "type": "zone", "nodes": [
+          {"id": "archive", "label": "Telemetry Archive", "shape": "cylinder", "detail": "10.20.2.10"},
+          {"id": "opsdb", "label": "Ops Database", "shape": "cylinder", "detail": "10.20.2.11"}
+        ]},
+        {"id": "ws", "label": "Operator Workstations", "type": "group", "nodes": [
+          {"id": "ws1", "label": "Console A", "stereotype": "workstation"},
+          {"id": "ws2", "label": "Console B", "stereotype": "workstation"}
+        ]}
+      ]},
+      {"id": "mgmt", "label": "Management Zone", "type": "zone", "nodes": [
+        {"id": "siem", "label": "SIEM Collector", "stereotype": "server"},
+        {"id": "pki", "label": "Certificate Authority", "stereotype": "server"},
+        {"id": "jump", "label": "Admin Jump Host", "stereotype": "server"}
+      ]}
+    ]},
+    {"id": "remote", "label": "Remote Antenna Site", "type": "site", "nodes": [
+      {"id": "ant", "label": "Antenna Controller", "stereotype": "controller", "ports": ["rf:W", "lan:E"]},
+      {"id": "modem", "label": "Baseband Modem", "stereotype": "modem"},
+      {"id": "rfw", "label": "Site Firewall", "stereotype": "firewall"}
+    ]},
+    {"id": "space", "label": "Space Segment", "type": "group", "nodes": [
+      {"id": "sat", "label": "Spacecraft", "shape": "external"}
+    ]}
+  ],
+  "edges": [
+    {"from": "inet", "to": "edge_fw.wan", "type": "link"},
+    {"from": "partner", "to": "vpn", "type": "tunnel", "protocol": "IPsec", "port": "500"},
+    {"from": "edge_fw.dmz", "to": "proxy", "type": "link"},
+    {"from": "edge_fw.dmz", "to": "vpn", "type": "link"},
+    {"from": "proxy", "to": "mps", "type": "flow", "label": "Plan uploads", "protocol": "HTTPS", "port": "443"},
+    {"from": "vpn", "to": "tlm", "type": "flow", "label": "Shared telemetry", "protocol": "TLS", "port": "8443", "marking": "CUI"},
+    {"from": "ws1", "to": "cmd", "type": "flow", "protocol": "HTTPS", "port": "443"},
+    {"from": "ws2", "to": "tlm", "type": "flow", "protocol": "HTTPS", "port": "443"},
+    {"from": "mps", "to": "cmd", "type": "flow", "label": "Approved plans"},
+    {"from": "fdy", "to": "mps", "type": "flow", "label": "Orbit products"},
+    {"from": "tlm", "to": "archive", "type": "flow", "protocol": "TDS", "port": "1433"},
+    {"from": "cmd", "to": "opsdb", "type": "flow", "protocol": "TDS", "port": "1433"},
+    {"from": "cmd", "to": "rfw", "type": "tunnel", "label": "Commands", "protocol": "IPsec", "marking": "CUI"},
+    {"from": "tlm", "to": "rfw", "type": "tunnel", "label": "Telemetry", "protocol": "IPsec", "marking": "CUI"},
+    {"from": "rfw", "to": "ant.lan", "type": "link"},
+    {"from": "ant", "to": "modem", "type": "link"},
+    {"from": "ant.rf", "to": "sat", "type": "wireless", "label": "S-band"},
+    {"from": "cmd", "to": "jump", "type": "admin", "protocol": "SSH", "port": "22"},
+    {"from": "cmd", "to": "siem", "type": "mgmt", "protocol": "Syslog", "port": "514"},
+    {"from": "edge_fw.core", "to": "siem", "type": "mgmt", "protocol": "Syslog", "port": "514"},
+    {"from": "vpn", "to": "pki", "type": "admin", "label": "Cert enrollment"}
+  ],
+  "views": [
+    {"name": "Full Network"},
+    {"name": "Site Summary", "subtitle": "Enclave and remote site collapsed; management zone hidden",
+     "collapse": ["ops", "remote"], "edge_types": ["link", "flow", "tunnel", "wireless"], "hide_unlinked": true}
+  ]
+}

@@ -1,0 +1,25 @@
+// TEMPLATE: SysML-style internal block diagram.
+// The enclosing block is a container of type "system"; its parts are nodes ("name : Type").
+// List the environment (external parts) FIRST so it lands on the input side.
+// Ports have sides; connect "part.port" to "part.port". Edge types: flow (item flow), connector, binding.
+{
+  "title": "<<Block>> Internals",
+  "subtitle": "<<What the internal structure shows>>",
+  "kind": "ibd",
+  "containers": [
+    {"id": "env", "label": "Environment", "type": "group", "nodes": [
+      {"id": "ext", "label": "<<ext : External System>>", "ports": ["out:E", "in:E"]}
+    ]},
+    {"id": "blk", "label": "<<Block Name>>", "type": "system", "stereotype": "block", "nodes": [
+      {"id": "p1", "label": "<<p1 : Part One>>", "ports": ["in:W", "out:E", "back:W"]},
+      {"id": "p2", "label": "<<p2 : Part Two>>", "ports": ["in:W", "out:E"]},
+      {"id": "p3", "label": "<<p3 : Part Three>>", "ports": ["in:W"]}
+    ]}
+  ],
+  "edges": [
+    {"from": "ext.out", "to": "p1.in", "type": "flow", "data": "<<Input item>>"},
+    {"from": "p1.out", "to": "p2.in", "type": "flow", "data": "<<Intermediate>>"},
+    {"from": "p2.out", "to": "p3.in", "type": "connector", "label": "<<Bus>>"},
+    {"from": "p1.back", "to": "ext.in", "type": "flow", "data": "<<Output item>>"}
+  ]
+}

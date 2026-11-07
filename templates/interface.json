@@ -1,0 +1,27 @@
+// TEMPLATE: interface diagram (ICD-style) with a generated interface table on page 2.
+// Give each node named ports with a side (N, S, E, W). Connect edges port to port: "node.port".
+// Interface ids (IF-01, ...) are assigned automatically unless you set "id". Power edges get no id.
+// Edge types: interface, bidir (two-way), control (dashed), power, physical.
+// Each edge label is at most 3 lines: id + label, data, protocol/port. Keep each line short.
+{
+  "title": "<<System>> Interfaces",
+  "subtitle": "<<Scope of the interfaces shown>>",
+  "kind": "interface",
+  "marking": "<<UNCLASSIFIED or delete>>",
+  "containers": [
+    {"id": "sys_a", "label": "<<System A>>", "type": "system", "nodes": [
+      {"id": "a1", "label": "<<Unit A1>>", "stereotype": "subsystem", "ports": ["CMD:E", "TLM:E"]},
+      {"id": "a2", "label": "<<Power Unit>>", "stereotype": "subsystem", "ports": ["28V:E"]}
+    ]},
+    {"id": "sys_b", "label": "<<System B>>", "type": "system", "nodes": [
+      {"id": "b1", "label": "<<Unit B1>>", "stereotype": "LRU", "ports": ["CMD:W", "TLM:W", "PWR:S", "OUT:E"]},
+      {"id": "b2", "label": "<<Unit B2>>", "stereotype": "LRU", "ports": ["IN:W"]}
+    ]}
+  ],
+  "edges": [
+    {"from": "a1.CMD", "to": "b1.CMD", "type": "interface", "data": "<<Commands>>", "protocol": "<<MIL-STD-1553B>>"},
+    {"from": "b1.TLM", "to": "a1.TLM", "type": "interface", "data": "<<Telemetry>>", "protocol": "<<MIL-STD-1553B>>"},
+    {"from": "a2.28V", "to": "b1.PWR", "type": "power", "label": "<<28 VDC>>"},
+    {"from": "b1.OUT", "to": "b2.IN", "type": "bidir", "data": "<<Data item>>", "protocol": "<<SpaceWire>>"}
+  ]
+}

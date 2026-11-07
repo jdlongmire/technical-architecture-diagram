@@ -1,0 +1,42 @@
+// TEMPLATE: network / deployment diagram.
+// Containers nest (site > zone > enclave). Put nodes in containers with "nodes" or with "in": "<container id>".
+// Edges: "from"/"to" take an id; use "node.port" to attach to a named port.
+// Write edges in the direction traffic starts. Two-way links: one edge with a two-way type (tunnel).
+// Edge types: link (no arrow), flow, tunnel (two-way), wireless, mgmt. Add your own under "edge_types".
+// Run  python3 scripts/make_tad.py --limits --kind network  for every length limit.
+{
+  "title": "<<System name>> Network",
+  "subtitle": "<<What this view shows, one sentence>>",
+  "kind": "network",
+  "marking": "<<UNCLASSIFIED, CUI, ... or delete this line>>",
+  "containers": [
+    {"id": "external", "label": "External", "type": "cloud", "nodes": [
+      {"id": "inet", "label": "Internet", "shape": "external"}
+    ]},
+    {"id": "site", "label": "<<Site name>>", "type": "site", "containers": [
+      {"id": "dmz", "label": "DMZ", "type": "zone", "nodes": [
+        {"id": "fw", "label": "<<Firewall>>", "stereotype": "firewall", "ports": ["wan:W", "lan:E"]},
+        {"id": "proxy", "label": "<<Reverse Proxy>>", "stereotype": "server", "detail": "<<10.0.0.10>>"}
+      ]},
+      {"id": "app", "label": "<<Application Zone>>", "type": "zone", "nodes": [
+        {"id": "app1", "label": "<<App Server>>", "stereotype": "server", "detail": "<<10.0.1.10>>"},
+        {"id": "db", "label": "<<Database>>", "shape": "cylinder", "detail": "<<10.0.2.10>>"}
+      ]},
+      {"id": "mgmt", "label": "Management Zone", "type": "zone", "nodes": [
+        {"id": "siem", "label": "<<SIEM>>", "stereotype": "server"}
+      ]}
+    ]}
+  ],
+  "edges": [
+    {"from": "inet", "to": "fw.wan", "type": "link"},
+    {"from": "fw.lan", "to": "proxy", "type": "link"},
+    {"from": "proxy", "to": "app1", "type": "flow", "protocol": "<<HTTPS>>", "port": "<<443>>"},
+    {"from": "app1", "to": "db", "type": "flow", "protocol": "<<TDS>>", "port": "<<1433>>"},
+    {"from": "app1", "to": "siem", "type": "mgmt", "protocol": "<<Syslog>>", "port": "<<514>>"}
+  ],
+  // Optional: several pages from one model. Delete "views" for a single page.
+  "views": [
+    {"name": "Full Network"},
+    {"name": "Summary", "collapse": ["app"], "edge_types": ["link", "flow"], "hide_unlinked": true}
+  ]
+}

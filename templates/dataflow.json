@@ -1,0 +1,29 @@
+// TEMPLATE: data flow diagram with trust and classification boundaries (security review).
+// Containers of type "trust", "classification" or "enclave" are boundaries. Any "flow" edge that
+// crosses one is drawn in the alert color automatically, and the checker asks for its protocol.
+// Shapes: process (default), store, external, actor. Edge types: flow, control.
+// Use "marking" on an edge for a portion mark, e.g. "(CUI)" in front of its label.
+{
+  "title": "<<System>> Data Flow",
+  "subtitle": "<<Scope of the review>>",
+  "kind": "dataflow",
+  "marking": "<<UNCLASSIFIED, CUI ... or delete>>",
+  "containers": [
+    {"id": "public", "label": "<<Public Network>>", "type": "trust", "nodes": [
+      {"id": "user", "label": "<<External User>>", "shape": "external"}
+    ]},
+    {"id": "enclave", "label": "<<Enclave>>", "type": "classification", "marking": "<<CUI>>", "nodes": [
+      {"id": "p1", "label": "<<Receive Request>>", "stereotype": "process"},
+      {"id": "p2", "label": "<<Process Data>>", "stereotype": "process"},
+      {"id": "store1", "label": "<<Data Store>>", "shape": "store"},
+      {"id": "op", "label": "<<Operator>>", "shape": "actor"}
+    ]}
+  ],
+  "edges": [
+    {"from": "user", "to": "p1", "data": "<<Request>>", "protocol": "<<HTTPS>>", "port": "<<443>>"},
+    {"from": "p1", "to": "p2", "data": "<<Validated request>>"},
+    {"from": "p2", "to": "store1", "data": "<<Records>>"},
+    {"from": "p2", "to": "op", "data": "<<Alerts>>"},
+    {"from": "op", "to": "p2", "type": "control", "data": "<<Approvals>>"}
+  ]
+}

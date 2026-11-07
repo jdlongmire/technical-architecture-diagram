@@ -1,0 +1,39 @@
+{
+  "title": "Imaging Payload Structure",
+  "subtitle": "Block definition diagram for a fictional payload: composition and specialization",
+  "kind": "bdd",
+  "nodes": [
+    {"id": "payload", "label": "Imaging Payload", "stereotype": "block",
+     "values": ["mass: kg = 42", "power: W = 85", "gsd: m = 1.5"],
+     "operations": ["captureImage()", "calibrate()"]},
+    {"id": "electronics", "label": "Payload Electronics", "stereotype": "block",
+     "values": ["power: W = 30"]},
+    {"id": "sensor", "label": "Sensor Head", "stereotype": "block",
+     "values": ["aperture: mm = 300", "focalLength: mm = 2400"]},
+    {"id": "processor", "label": "Image Processor", "stereotype": "block",
+     "values": ["throughput: MB/s = 400"], "operations": ["compress()"]},
+    {"id": "controller", "label": "Payload Controller", "stereotype": "block"},
+    {"id": "pdu", "label": "Power Distribution", "stereotype": "block"},
+    {"id": "detector", "label": "Detector", "stereotype": "abstract block",
+     "values": ["pixels: count", "pitch: um"]},
+    {"id": "fpa_vis", "label": "Visible FPA", "stereotype": "block", "values": ["pixels: count = 12000"]},
+    {"id": "fpa_ir", "label": "Infrared FPA", "stereotype": "block", "values": ["cooling: K = 80"]},
+    {"id": "optics", "label": "Telescope Optics", "stereotype": "block"},
+    {"id": "thermal", "label": "Thermal Controller", "stereotype": "block"},
+    {"id": "spacewire", "label": "SpaceWire Link", "stereotype": "interface block"}
+  ],
+  "edges": [
+    {"from": "payload", "to": "electronics", "type": "composition"},
+    {"from": "payload", "to": "sensor", "type": "composition"},
+    {"from": "payload", "to": "processor", "type": "composition"},
+    {"from": "electronics", "to": "controller", "type": "composition"},
+    {"from": "electronics", "to": "pdu", "type": "composition"},
+    {"from": "sensor", "to": "optics", "type": "composition"},
+    {"from": "sensor", "to": "thermal", "type": "composition"},
+    {"from": "sensor", "to": "detector", "type": "composition", "label": "1..2"},
+    {"from": "fpa_vis", "to": "detector", "type": "generalization"},
+    {"from": "fpa_ir", "to": "detector", "type": "generalization"},
+    {"from": "controller", "to": "spacewire", "type": "dependency", "label": "uses"},
+    {"from": "processor", "to": "spacewire", "type": "dependency", "label": "uses"}
+  ]
+}
