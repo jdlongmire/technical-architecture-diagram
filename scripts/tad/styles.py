@@ -64,6 +64,21 @@ EDGE_TYPES = {
         "binding":   _E(label="Binding", dash="dashed", color="muted", start="none", end="none", width=1.25),
     },
 }
+# Provenance edge types (reference/provenance_profile.md): available in every kind.
+# They carry no interface id in interface diagrams (ifid=False).
+PROVENANCE_EDGE_TYPES = {
+    "trace":    _E(label="Trace (to authority)", dash="dashed", color="muted", start="none", end="open",
+                   width=1.25, ifid=False),
+    "allocate": _E(label="Allocate", dash="dashed", color="edge", start="none", end="open",
+                   width=1.25, ifid=False),
+    "verify":   _E(label="Verify", dash="dashed", color="accent", start="none", end="open",
+                   width=1.25, ifid=False),
+    "satisfy":  _E(label="Satisfy", dash="dashed", color="accent", start="none", end="open",
+                   width=1.25, ifid=False),
+}
+for _k in EDGE_TYPES:
+    EDGE_TYPES[_k].update(PROVENANCE_EDGE_TYPES)
+
 DEFAULT_EDGE_TYPE = {"network": "link", "interface": "interface", "dataflow": "flow",
                      "bdd": "association", "ibd": "connector"}
 

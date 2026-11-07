@@ -3,6 +3,14 @@
   "subtitle": "External and internal interfaces of a fictional imaging payload",
   "kind": "interface",
   "marking": "UNCLASSIFIED",
+  "id": "TAD-EX-IF-001",
+  "context": "Imaging Payload (fictional example)",
+  "owner": "Payload project office (example)",
+  "version": "1.0",
+  "status": "approved",
+  "sources": [
+    {"id": "ICD-PAY-001", "title": "Payload interface control document (fictional)"}
+  ],
   "containers": [
     {"id": "bus", "label": "Spacecraft Bus", "type": "system", "nodes": [
       {"id": "cdh", "label": "Command and Data Handling", "stereotype": "subsystem",
@@ -24,7 +32,7 @@
       {"id": "proc", "label": "Image Processor", "stereotype": "LRU", "ports": ["IN:W", "OUT:S"]}
     ]},
     {"id": "ground", "label": "Ground Segment", "type": "site", "nodes": [
-      {"id": "gs", "label": "Ground Station", "stereotype": "external", "shape": "external", "ports": ["RF:W"]}
+      {"id": "gs", "label": "Ground Station", "stereotype": "external", "shape": "external", "owner": "Ground segment operator (example)", "source_ref": "ICD-PAY-001", "ports": ["RF:W"]}
     ]}
   ],
   "edges": [

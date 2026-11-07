@@ -13,7 +13,7 @@ Everything is in this folder:
 - `scripts/make_tad.py` is the only command you run.
 - `templates/` has one fill-in spec per kind. Always start from one.
 - `examples/` has finished specs with their `.drawio` files and preview images.
-- `reference/spec_reference.md` lists every field. `reference/limits.md` lists every limit and vocabulary word. `reference/report_guide.md` explains every report message.
+- `reference/spec_reference.md` lists every field. `reference/limits.md` lists every limit and vocabulary word. `reference/report_guide.md` explains every report message. `reference/provenance_profile.md` defines the provenance format: frame header, spec metadata, element and relationship provenance, and the strict gates that apply by default to `interface` and `dataflow` diagrams.
 
 Requirements: Python 3 with `pip install -r requirements.txt` (Pillow, cairosvg, pypdf) and Node.js 16 or newer. ELK is bundled, so no npm install is needed. Optional: the draw.io desktop app, for `--renderer drawio`.
 
@@ -43,6 +43,7 @@ Copy the template (for example to `spec.json`) and replace every `<<...>>` with 
 7. **Labels:** short and specific. An edge label has at most three lines: label, data, protocol/port. Put long detail in the interface table rather than on the line.
 8. **Delete** template items you have no content for. Never leave `<<...>>`.
 9. **Density:** more than about 40 nodes on one page gets hard to read. Add `views`: a full view plus summary views that `collapse` containers, filter `edge_types`, or `include` one area.
+10. **Provenance:** every diagram gets a frame header from its metadata (`id`, `context`, `owner`, `version`, `status`, `sources`). `interface` and `dataflow` specs are strict by default: those fields are required, external elements need `owner` and `source_ref`, and boundary-crossing flows need a `marking`. Other kinds are light. Full rules: `reference/provenance_profile.md`.
 
 Before the first build, check the spec and see the limits:
 ```

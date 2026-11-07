@@ -10,6 +10,7 @@ Usage:
 The first line of the report is RESULT: PASS, FIX, or INVALID.
 """
 import argparse
+import hashlib
 import json
 import os
 import sys
@@ -98,6 +99,11 @@ def main(argv=None):
     clean_path = base + ".normalized.json"
     with open(clean_path, "w", encoding="utf-8") as f:
         json.dump(spec, f, indent=2, ensure_ascii=False)
+    with open(clean_path, "rb") as f:
+        report["spec_sha256"] = hashlib.sha256(f.read()).hexdigest()
+    report["tool_version"] = __version__
+    report["provenance"] = spec.get("provenance", "light")
+    report["provenance_default"] = bool(spec.get("provenance_default"))
 
     issues += SP.content_checks(spec)
     if not T.font_available():
@@ -112,6 +118,8 @@ def main(argv=None):
         print("RESULT: DRY-RUN")
         print(f"CLEAN SPEC: {clean_path}")
         print(f"KIND: {spec['kind']}  DIRECTION: {spec['direction']}  PAGE: {spec['page']}")
+        print(f"PROVENANCE: {spec.get('provenance', 'light')}"
+              + (" (default for kind)" if spec.get("provenance_default") else ""))
         for v in views:
             c, n, e = LY.select(spec, v)
             print(f"VIEW {(v or {}).get('name', 'Overview')!r}: {len(n)} nodes, {len(c)} containers, {len(e)} edges "
@@ -196,6 +204,10 @@ def _print(report, result, out, clean, fixes, issues, extras):
     for t, p in extras or []:
         print(f"{t}: {p}")
     print(f"CLEAN SPEC: {clean}")
+    if report.get("provenance"):
+        print(f"PROVENANCE: {report['provenance']}"
+              + (" (default for kind)" if report.get("provenance_default") else "")
+              + f"  TOOL: tad {report.get('tool_version', '')}  SPEC SHA256: {report.get('spec_sha256', '')[:16]}...")
     for v in report["views"]:
         print(f"VIEW {v['name']!r}: {v['nodes']} nodes, {v['edges']} edges, {v['crossings']} crossings, "
               f"{v['size'][0]}x{v['size'][1]} px")

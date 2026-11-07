@@ -7,7 +7,7 @@ from . import limits as L
 from . import styles as S
 from . import text as T
 from .geom import arrowhead, head_setback, shorten
-from .layout import BANNER_H, MARGIN, ICON, PAD_X, PAD_Y, HEADER_H
+from .layout import BANNER_H, MARGIN, ICON, PAD_X, PAD_Y, HEADER_H, FRAME_H
 
 FONT = "Liberation Sans, Arial, Helvetica, sans-serif"
 _ICONS = None
@@ -66,11 +66,17 @@ def render(sc):
             o.append(_text(W / 2, by + BANNER_H / 2 + L.FONT_BANNER * 0.36, sc["marking"].upper(),
                            L.FONT_BANNER, fg, bold=True, anchor="middle"))
         y0 += BANNER_H + 8 - 8
-    o.append(_text(MARGIN, y0 + L.FONT_TITLE, sc["title"], L.FONT_TITLE, th["title"], bold=True))
-    yy = y0 + L.FONT_TITLE + 10
+    fh = FRAME_H if sc.get("frame") else 0
+    if sc.get("frame"):
+        o.append(_text(MARGIN, y0 + 11, sc["frame"], 11, th["muted"], bold=True))
+    o.append(_text(MARGIN, y0 + fh + L.FONT_TITLE, sc["title"], L.FONT_TITLE, th["title"], bold=True))
+    yy = y0 + fh + L.FONT_TITLE + 10
     if sc.get("subtitle"):
         o.append(_text(MARGIN, yy + L.FONT_SUBTITLE, sc["subtitle"], L.FONT_SUBTITLE, th["muted"]))
-    o.append(_text(W - MARGIN, y0 + L.FONT_TITLE, "View: " + sc["name"], 11, th["muted"], anchor="end"))
+        yy += L.FONT_SUBTITLE + 8
+    if sc.get("chips"):
+        o.append(_text(MARGIN, yy + L.FONT_DETAIL, sc["chips"], L.FONT_DETAIL, th["muted"]))
+    o.append(_text(W - MARGIN, y0 + fh + L.FONT_TITLE, "View: " + sc["name"], 11, th["muted"], anchor="end"))
 
     if sc.get("table"):
         o += _table(sc, th)
@@ -89,6 +95,12 @@ def render(sc):
             o.append(_text(tx, ty, st, L.FONT_STEREO, th["muted"], italic=True))
             tx += T.width(st, L.FONT_STEREO, italic=True)
         o.append(_text(tx, ty, c["label"], L.FONT_CONTAINER, th["text"], bold=True))
+        tx += T.width(c["label"], L.FONT_CONTAINER, bold=True)
+        if c.get("source_ref"):
+            o.append(_text(tx, ty, " " + c["source_ref"], L.FONT_STEREO, th["accent"]))
+            tx += T.width(" " + c["source_ref"], L.FONT_STEREO)
+        if c.get("owner") and (sc.get("meta") or {}).get("provenance") == "strict":
+            o.append(_text(tx, ty, " · " + c["owner"], L.FONT_STEREO, th["muted"]))
         if c.get("marking"):
             bg, fg = S.marking_colors(c["marking"])
             bw = T.width(c["marking"], 9, bold=True) + 12
@@ -117,8 +129,19 @@ def render(sc):
 
     if sc.get("legend"):
         o += _legend(sc["legend"], th)
+    if sc.get("notes_box"):
+        o += _notes(sc["notes_box"], th)
     o.append("</svg>")
     return "\n".join(o)
+
+
+def _notes(nb, th):
+    x, y = nb["x"], nb["y"]
+    o = [f'<rect x="{x}" y="{y}" width="{nb["w"]}" height="{nb["h"]}" rx="3" fill="#FFFBEA" stroke="#CBD2D9"/>',
+         _text(x + 8, y + 17, "Notes", 11, th["text"], bold=True)]
+    for i, ln in enumerate(nb["lines"]):
+        o.append(_text(x + 8, y + 26 + 15 * (i + 1) - 4, ln, L.FONT_LEGEND, th["text"]))
+    return o
 
 
 def _edge(e, th):

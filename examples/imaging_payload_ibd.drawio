@@ -1,24 +1,27 @@
 <?xml version='1.0' encoding='utf-8'?>
-<mxfile host="technical-architecture-diagram" agent="tad 0.1" version="24.0.0" type="device">
- <diagram name="Overview" id="Overview">
-  <mxGraphModel dx="0" dy="0" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1670" pageHeight="522" math="0" shadow="0">
+<mxfile host="technical-architecture-diagram" agent="tad 0.2.0" version="24.0.0" type="device">
+ <diagram name="Overview" id="Overview" tad_kind="ibd" tad_provenance="light">
+  <mxGraphModel dx="0" dy="0" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1670" pageHeight="539" math="0" shadow="0">
    <root>
     <mxCell id="0" />
     <mxCell id="1" parent="0" />
+    <mxCell id="frame" value="tad ibd Imaging Payload Internals" style="text;html=1;align=left;verticalAlign=top;fontSize=11;fontStyle=1;fontFamily=Helvetica;fontColor=#52606D;whiteSpace=nowrap;" vertex="1" parent="1">
+     <mxGeometry x="36.00" y="32.00" width="613.41" height="15.00" as="geometry" />
+    </mxCell>
     <mxCell id="title" value="Imaging Payload Internals" style="text;html=1;align=left;verticalAlign=top;fontSize=22;fontStyle=1;fontFamily=Helvetica;fontColor=#102A43;whiteSpace=nowrap;" vertex="1" parent="1">
-     <mxGeometry x="36.00" y="32.00" width="433.41" height="32.00" as="geometry" />
+     <mxGeometry x="36.00" y="49.00" width="433.41" height="32.00" as="geometry" />
     </mxCell>
     <mxCell id="subtitle" value="Internal block diagram for a fictional payload: parts, ports and item flows" style="text;html=1;align=left;verticalAlign=top;fontSize=13;fontFamily=Helvetica;fontColor=#52606D;whiteSpace=nowrap;" vertex="1" parent="1">
-     <mxGeometry x="36.00" y="66.00" width="613.41" height="21.00" as="geometry" />
+     <mxGeometry x="36.00" y="83.00" width="613.41" height="21.00" as="geometry" />
     </mxCell>
     <mxCell id="viewname" value="View: Overview" style="text;html=1;align=right;verticalAlign=top;fontSize=11;fontFamily=Helvetica;fontColor=#52606D;" vertex="1" parent="1">
-     <mxGeometry x="1374.00" y="42.00" width="260.00" height="18.00" as="geometry" />
+     <mxGeometry x="1374.00" y="59.00" width="260.00" height="18.00" as="geometry" />
     </mxCell>
     <mxCell id="c_env" value="&lt;b&gt;Environment&lt;/b&gt;" style="rounded=1;arcSize=2;absoluteArcSize=1;html=1;whiteSpace=wrap;container=1;collapsible=0;recursiveResize=0;fillColor=none;strokeColor=#9AA5B1;strokeWidth=1.25;verticalAlign=top;align=left;spacingLeft=10;spacingTop=2;fontSize=12;fontFamily=Helvetica;fontColor=#1F2933;dashed=1;dashPattern=1 3;" vertex="1" parent="1">
-     <mxGeometry x="44.00" y="111.00" width="196.00" height="208.40" as="geometry" />
+     <mxGeometry x="44.00" y="128.00" width="196.00" height="208.40" as="geometry" />
     </mxCell>
     <mxCell id="c_payload" value="&lt;i style=&quot;font-weight:normal;font-size:10px;color:#52606D&quot;&gt;«block»&lt;/i&gt; &lt;b&gt;Imaging Payload&lt;/b&gt;" style="rounded=1;arcSize=2;absoluteArcSize=1;html=1;whiteSpace=wrap;container=1;collapsible=0;recursiveResize=0;fillColor=#F7F9FB;strokeColor=#3E4C59;strokeWidth=1.5;verticalAlign=top;align=left;spacingLeft=10;spacingTop=2;fontSize=12;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
-     <mxGeometry x="308.00" y="111.00" width="1318.00" height="257.00" as="geometry" />
+     <mxGeometry x="308.00" y="128.00" width="1318.00" height="257.00" as="geometry" />
     </mxCell>
     <mxCell id="n_bus" value="&lt;b&gt;bus : Spacecraft Bus&lt;/b&gt;" style="html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#3E4C59;strokeWidth=1.25;fontSize=12;fontFamily=Helvetica;fontColor=#1F2933;verticalAlign=middle;align=center;spacing=4;rounded=0;" vertex="1" parent="c_env">
      <mxGeometry x="14.00" y="104.00" width="139.00" height="90.00" as="geometry" />
@@ -114,8 +117,8 @@
      <mxGeometry relative="1" as="geometry" x="-0.1112" y="0">
       <mxPoint x="0.00" y="-10.00" as="offset" />
       <Array as="points">
-       <mxPoint x="266.00" y="231.00" />
-       <mxPoint x="266.00" y="200.00" />
+       <mxPoint x="266.00" y="248.00" />
+       <mxPoint x="266.00" y="217.00" />
       </Array>
      </mxGeometry>
     </mxCell>
@@ -123,8 +126,8 @@
      <mxGeometry relative="1" as="geometry" x="0.0687" y="0">
       <mxPoint x="0.00" y="10.00" as="offset" />
       <Array as="points">
-       <mxPoint x="278.00" y="217.00" />
-       <mxPoint x="278.00" y="250.00" />
+       <mxPoint x="278.00" y="234.00" />
+       <mxPoint x="278.00" y="267.00" />
       </Array>
      </mxGeometry>
     </mxCell>
@@ -132,8 +135,8 @@
      <mxGeometry relative="1" as="geometry" x="-0.3106" y="0">
       <mxPoint x="0.00" y="-10.00" as="offset" />
       <Array as="points">
-       <mxPoint x="278.00" y="270.00" />
-       <mxPoint x="278.00" y="308.00" />
+       <mxPoint x="278.00" y="287.00" />
+       <mxPoint x="278.00" y="325.00" />
       </Array>
      </mxGeometry>
     </mxCell>
@@ -146,8 +149,8 @@
      <mxGeometry relative="1" as="geometry" x="0.2076" y="0">
       <mxPoint x="0.00" y="10.00" as="offset" />
       <Array as="points">
-       <mxPoint x="832.00" y="223.00" />
-       <mxPoint x="832.00" y="241.00" />
+       <mxPoint x="832.00" y="240.00" />
+       <mxPoint x="832.00" y="258.00" />
       </Array>
      </mxGeometry>
     </mxCell>
@@ -155,7 +158,7 @@
      <mxGeometry relative="1" as="geometry" x="-0.1114" y="0">
       <mxPoint x="0.00" y="-10.00" as="offset" />
       <Array as="points">
-       <mxPoint x="1224.00" y="318.00" />
+       <mxPoint x="1224.00" y="335.00" />
       </Array>
      </mxGeometry>
     </mxCell>
@@ -163,7 +166,7 @@
      <mxGeometry relative="1" as="geometry" x="-0.0621" y="0">
       <mxPoint x="0.00" y="-10.00" as="offset" />
       <Array as="points">
-       <mxPoint x="975.00" y="298.00" />
+       <mxPoint x="975.00" y="315.00" />
       </Array>
      </mxGeometry>
     </mxCell>
@@ -171,7 +174,7 @@
      <mxGeometry relative="1" as="geometry" x="-0.1503" y="0">
       <mxPoint x="0.00" y="10.00" as="offset" />
       <Array as="points">
-       <mxPoint x="434.50" y="231.00" />
+       <mxPoint x="434.50" y="248.00" />
       </Array>
      </mxGeometry>
     </mxCell>
@@ -184,8 +187,8 @@
      <mxGeometry relative="1" as="geometry" x="0.6769" y="0">
       <mxPoint x="0.00" y="-22.10" as="offset" />
       <Array as="points">
-       <mxPoint x="1104.00" y="166.00" />
-       <mxPoint x="1104.00" y="192.00" />
+       <mxPoint x="1104.00" y="183.00" />
+       <mxPoint x="1104.00" y="209.00" />
       </Array>
      </mxGeometry>
     </mxCell>
@@ -193,8 +196,8 @@
      <mxGeometry relative="1" as="geometry" x="-0.0409" y="0">
       <mxPoint x="28.96" y="0.00" as="offset" />
       <Array as="points">
-       <mxPoint x="1338.00" y="203.00" />
-       <mxPoint x="1338.00" y="316.00" />
+       <mxPoint x="1338.00" y="220.00" />
+       <mxPoint x="1338.00" y="333.00" />
       </Array>
      </mxGeometry>
     </mxCell>
@@ -202,10 +205,10 @@
      <mxGeometry relative="1" as="geometry" x="-0.0211" y="0">
       <mxPoint x="0.00" y="-10.00" as="offset" />
       <Array as="points">
-       <mxPoint x="1612.00" y="316.00" />
-       <mxPoint x="1612.00" y="353.00" />
-       <mxPoint x="266.00" y="353.00" />
-       <mxPoint x="266.00" y="289.00" />
+       <mxPoint x="1612.00" y="333.00" />
+       <mxPoint x="1612.00" y="370.00" />
+       <mxPoint x="266.00" y="370.00" />
+       <mxPoint x="266.00" y="306.00" />
       </Array>
      </mxGeometry>
     </mxCell>
@@ -213,13 +216,13 @@
      <mxGeometry relative="1" as="geometry" x="0.5618" y="0">
       <mxPoint x="0.00" y="18.20" as="offset" />
       <Array as="points">
-       <mxPoint x="1104.00" y="241.00" />
-       <mxPoint x="1104.00" y="215.00" />
+       <mxPoint x="1104.00" y="258.00" />
+       <mxPoint x="1104.00" y="232.00" />
       </Array>
      </mxGeometry>
     </mxCell>
     <mxCell id="legend" value="&lt;b&gt;Legend&lt;/b&gt;" style="rounded=1;arcSize=3;absoluteArcSize=1;html=1;container=1;collapsible=0;fillColor=#FFFFFF;strokeColor=#CBD2D9;verticalAlign=top;align=left;spacingLeft=8;spacingTop=2;fontSize=11;fontFamily=Helvetica;fontColor=#1F2933;" vertex="1" parent="1">
-     <mxGeometry x="36.00" y="394.00" width="307.00" height="92.00" as="geometry" />
+     <mxGeometry x="36.00" y="411.00" width="307.00" height="92.00" as="geometry" />
     </mxCell>
     <mxCell id="legend_e0" value="" style="edgeStyle=none;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1F5FAD;strokeWidth=1.5;endArrow=block;endFill=1;startArrow=none;startFill=0;endSize=8;startSize=8;fontSize=10;fontFamily=Helvetica;fontColor=#1F2933;labelBackgroundColor=#FFFFFF;" edge="1" parent="legend">
      <mxGeometry relative="1" as="geometry">

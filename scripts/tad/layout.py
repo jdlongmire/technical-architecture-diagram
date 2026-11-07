@@ -25,6 +25,8 @@ CONTAINER_PAD = 14
 PORT_SIZE = 8
 MARGIN = 36
 BANNER_H = 22
+FRAME_H = 17   # provenance frame header line (provenance_profile.md)
+CHIP_H = 16    # version/status chips line under the subtitle
 ICON = 18
 
 
@@ -125,7 +127,7 @@ def select(spec, view):
 
 # Node sizing -------------------------------------------------------------------
 
-def measure_node(n, kind, icons_on, issues, path):
+def measure_node(n, kind, icons_on, issues, path, level="light"):
     shape = n.get("shape") or S.DEFAULT_SHAPE[kind]
     n["shape"] = shape
     icon = bool(icons_on and n.get("icon"))
@@ -144,11 +146,18 @@ def measure_node(n, kind, icons_on, issues, path):
                             f"shorten it to at most {budget} characters"))
     blocks = []  # (text, size, bold, italic, color_key, align)
     if n.get("stereotype"):
-        blocks.append(("«" + n["stereotype"] + "»", L.FONT_STEREO, False, True, "muted", "center"))
+        stereo = "«" + n["stereotype"] + "»"
+        if n.get("source_ref"):
+            stereo += " " + n["source_ref"]   # provenance tag, e.g. «source» ICD-04
+        blocks.append((stereo, L.FONT_STEREO, False, True, "muted", "center"))
+    elif n.get("source_ref"):
+        blocks.append((n["source_ref"], L.FONT_STEREO, False, False, "accent", "center"))
     for ln in label_lines:
         blocks.append((ln, L.FONT_LABEL, True, False, "text", "center"))
     if n.get("detail"):
         blocks.append((n["detail"], L.FONT_DETAIL, False, False, "muted", "center"))
+    if level == "strict" and n.get("owner"):
+        blocks.append(("Owner: " + n["owner"], L.FONT_DETAIL, False, False, "muted", "center"))
 
     text_w = max([T.width(b[0], b[1], b[2], b[3]) for b in blocks] + [0])
     text_h = sum(T.line_height(b[1]) for b in blocks)
@@ -193,11 +202,15 @@ def measure_node(n, kind, icons_on, issues, path):
     return n
 
 
-def measure_container(c):
+def measure_container(c, level="light"):
     lab = c["label"]
     w = T.width(lab, L.FONT_CONTAINER, bold=True) + 2 * CONTAINER_PAD
     if c.get("stereotype"):
         w += T.width("«" + c["stereotype"] + "» ", L.FONT_STEREO, italic=True)
+    if c.get("source_ref"):
+        w += T.width(" " + c["source_ref"], L.FONT_STEREO)
+    if level == "strict" and c.get("owner"):
+        w += T.width(" · " + c["owner"], L.FONT_STEREO)
     if c.get("marking"):
         w += T.width(c["marking"], 9, bold=True) + 22
     c["_minw"] = round(w + 8)
@@ -376,9 +389,9 @@ def layout_view(spec, view, issues, vpath):
     idx = {n["id"]: i for i, n in enumerate(spec["nodes"])}
     for n in nodes.values():
         p = f"nodes[{idx[n['id']]}]" if n["id"] in idx and vpath == "" else ""
-        measure_node(n, kind, spec.get("icons"), issues, p)
+        measure_node(n, kind, spec.get("icons"), issues, p, spec.get("provenance", "light"))
     for c in containers.values():
-        measure_container(c)
+        measure_container(c, spec.get("provenance", "light"))
 
     def attempt(d):
         elk_labels = set()
@@ -411,6 +424,36 @@ def layout_view(spec, view, issues, vpath):
     else:
         sc = attempt(direction)
     return sc
+
+
+def frame_line(spec):
+    """Provenance frame header: tad [kind] [context] [diagram name]."""
+    parts = ["tad", spec["kind"]]
+    if spec.get("context"):
+        parts.append(spec["context"])
+    parts.append(spec["title"])
+    return " ".join(parts)
+
+
+def chips_line(spec):
+    """Version/status chips line, or None when neither is set."""
+    chips = []
+    if spec.get("version"):
+        chips.append("Version " + spec["version"])
+    if spec.get("status"):
+        chips.append("Status " + spec["status"])
+    return " · ".join(chips) if chips else None
+
+
+def scene_meta(spec):
+    """Spec metadata embedded into the .drawio file (the digital title block)."""
+    meta = OrderedDict(kind=spec["kind"], provenance=spec.get("provenance", "light"))
+    for k in ("id", "context", "owner", "version", "status"):
+        if spec.get(k):
+            meta[k] = spec[k]
+    if spec.get("sources"):
+        meta["sources"] = ";".join(s["id"] for s in spec["sources"])
+    return meta
 
 
 def _scene(spec, view, containers, nodes, edges, direction, label_edges):
@@ -448,13 +491,14 @@ def _scene(spec, view, containers, nodes, edges, direction, label_edges):
 
     collect(out, 0, 0)
 
-    title_h = 0
-    title_h += L.FONT_TITLE + 10
+    frame = frame_line(spec)
+    chips = chips_line(spec)
+    title_h = FRAME_H + L.FONT_TITLE + 10
     sub = (view or {}).get("subtitle") or spec.get("subtitle")
     if sub:
         title_h += L.FONT_SUBTITLE + 8
-    if view and spec.get("views") and len(spec["views"]) > 1:
-        title_h += 0
+    if chips:
+        title_h += CHIP_H
     top = MARGIN + (BANNER_H + 8 if spec.get("marking") else 0) + title_h + 14
     left = MARGIN
     dx, dy = left - out.get("x", 0), top
@@ -468,6 +512,9 @@ def _scene(spec, view, containers, nodes, edges, direction, label_edges):
     sc["marking"] = spec.get("marking")
     sc["theme"] = theme
     sc["kind"] = kind
+    sc["frame"] = frame
+    sc["chips"] = chips
+    sc["meta"] = scene_meta(spec)
     sc["containers"], sc["nodes"], sc["edges"] = [], [], []
 
     for cid, c in containers.items():
@@ -477,7 +524,8 @@ def _scene(spec, view, containers, nodes, edges, direction, label_edges):
         if stroke == "marking":
             stroke = S.marking_colors(c.get("marking") or spec.get("marking"))[0]
         sc["containers"].append(dict(id=cid, label=c["label"], type=c["type"], stereotype=c.get("stereotype"),
-                                     marking=c.get("marking"), parent=c.get("in") if c.get("in") in containers else None,
+                                     marking=c.get("marking"), owner=c.get("owner"), source_ref=c.get("source_ref"),
+                                     parent=c.get("in") if c.get("in") in containers else None,
                                      x=x + dx, y=y + dy, w=w, h=h, depth=depth,
                                      fill=ct["fill"], stroke=stroke, dash=ct["dash"], width=ct["width"]))
     sc["containers"].sort(key=lambda c: c["depth"])
@@ -498,6 +546,7 @@ def _scene(spec, view, containers, nodes, edges, direction, label_edges):
             lb = _port_label_box(px, py, pw, ph, side, lw, lh)
             ports.append(dict(id=pid, label=lab, x=px, y=py, w=pw, h=ph, side=side, label_box=lb))
         sc["nodes"].append(dict(id=nid, label=n["label"], stereotype=n.get("stereotype"), detail=n.get("detail"),
+                                owner=n.get("owner"), source_ref=n.get("source_ref"),
                                 shape=n["shape"], parent=n.get("in") if n.get("in") in containers else None,
                                 x=x + dx, y=y + dy, w=w, h=h, ports=ports, blocks=n["_blocks"], comps=n["_comps"],
                                 icon=n.get("icon") if n["_icon"] else None, marking=n.get("marking"),
@@ -545,6 +594,9 @@ def _scene(spec, view, containers, nodes, edges, direction, label_edges):
     sc["title_w"] = T.width(spec["title"], L.FONT_TITLE, bold=True)
     if sub:
         sc["title_w"] = max(sc["title_w"], T.width(sub, L.FONT_SUBTITLE))
+    sc["title_w"] = max(sc["title_w"], T.width(frame, 11, bold=True))
+    if chips:
+        sc["title_w"] = max(sc["title_w"], T.width(chips, L.FONT_DETAIL))
     width = max(width, MARGIN * 2 + sc["title_w"])
 
     # Legend
@@ -555,6 +607,23 @@ def _scene(spec, view, containers, nodes, edges, direction, label_edges):
             sc["legend"] = leg
             height = leg["y"] + leg["h"]
             width = max(width, leg["x"] + leg["w"] + MARGIN)
+
+    # Visible rationale/problem notes (provenance profile): a callout panel keyed by anchor.
+    visible = [n for n in spec.get("notes", []) if n.get("show")]
+    if visible:
+        labels = {x["id"]: x["label"] for x in spec["containers"] + spec["nodes"]}
+        box_w = max(280, min(920, gw))
+        lines = []
+        for n in visible:
+            head = f"{n['id']} ({n['kind']})"
+            if n.get("anchor"):
+                head += f" re {labels.get(n['anchor'], n['anchor'])}"
+            lines += T.wrap(head + ": " + n["text"], L.FONT_LEGEND, box_w - 16)
+        nb = dict(x=left, y=height + 18, w=round(max(T.width(x, L.FONT_LEGEND) for x in lines) + 16),
+                  h=26 + len(lines) * 15 + 6, lines=lines)
+        sc["notes_box"] = nb
+        height = nb["y"] + nb["h"]
+        width = max(width, nb["x"] + nb["w"] + MARGIN)
     height += MARGIN + (BANNER_H + 8 if spec.get("marking") else 0)
     sc["width"], sc["height"] = round(width), round(height)
     return sc
@@ -658,9 +727,12 @@ def table_scene(spec, base_scene):
         drop = None
     cols = [(t, k, w) for i, ((t, k), w) in enumerate(zip(TABLE_COLS, widths)) if i != drop]
     rh = 22
-    top = MARGIN + (BANNER_H + 8 if spec.get("marking") else 0) + L.FONT_TITLE + 10 + L.FONT_SUBTITLE + 8 + 14
+    chips = chips_line(spec)
+    top = MARGIN + (BANNER_H + 8 if spec.get("marking") else 0) + FRAME_H + L.FONT_TITLE + 10 \
+        + L.FONT_SUBTITLE + 8 + (CHIP_H if chips else 0) + 14
     sc = OrderedDict(name="Interfaces", title=spec["title"], subtitle="Interface table (generated from edges)",
                      marking=spec.get("marking"), theme=base_scene["theme"], kind="table",
+                     frame=frame_line(spec), chips=chips, meta=scene_meta(spec),
                      containers=[], nodes=[], edges=[])
     tw = sum(c[2] for c in cols)
     sc["table"] = dict(x=MARGIN, y=top, cols=cols, rows=rows, row_h=rh, w=tw, h=rh * (len(rows) + 1))

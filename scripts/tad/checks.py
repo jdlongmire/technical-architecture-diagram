@@ -126,6 +126,11 @@ def scene_checks(sc, spec, multi_view):
                 out.append(issue("WARNING", epath(e, "protocol"),
                                  f"{tag}flow {e['src']} -> {e['dst']} crosses a trust boundary with no protocol",
                                  "add 'protocol' (and 'port') so reviewers can see how the crossing is protected"))
+            if e["crossing"] and not e.get("marking") and not spec.get("marking"):
+                lvl = "ERROR" if spec.get("provenance") == "strict" else "WARNING"
+                out.append(issue(lvl, epath(e, "marking"),
+                                 f"{tag}flow {e['src']} -> {e['dst']} crosses a trust boundary with no marking",
+                                 "add 'marking' to the flow, or set the page 'marking' it falls under"))
     if spec["kind"] == "bdd":
         for n in sc["nodes"]:
             if not n.get("stereotype") and not n.get("collapsed"):
@@ -202,6 +207,45 @@ def spec_checks(spec):
     if spec.get("marking"):
         out.append(issue("INFO", "marking", "markings are drawn as given; the tool does not determine or "
                                             "validate classification"))
+
+    # Provenance gates (reference/provenance_profile.md) -------------------------
+    strict = spec.get("provenance", "light") == "strict"
+    gate = "ERROR" if strict else "WARNING"
+    missing = [k for k in ("id", "owner", "status") if not spec.get(k)]
+    if missing and (strict or len(missing) < 3):
+        out.append(issue(gate, "provenance",
+                         ("strict provenance requires spec metadata; missing: " if strict
+                          else "provenance metadata is partially supplied; missing: ") + ", ".join(missing),
+                         "add 'id', 'owner' and 'status' at the top level of the spec"))
+    for coll, name in ((spec["containers"], "containers"), (spec["nodes"], "nodes")):
+        for i, x in enumerate(coll):
+            if x.get("shape") == "external" or x.get("stereotype") == "external":
+                miss = [k for k in ("owner", "source_ref") if not x.get(k)]
+                if miss:
+                    out.append(issue(gate, f"{name}[{i}]",
+                                     f"external element '{x['id']}' has no {', '.join(miss)}",
+                                     "set 'owner' and 'source_ref' on external elements"))
+    elements = {x["id"] for x in spec["containers"] + spec["nodes"]}
+    known = elements | {s["id"] for s in spec.get("sources", [])}
+    import re as _re
+    for n in spec["nodes"]:
+        for lines in (n.get("compartments") or {}).values():
+            for ln in lines:
+                known.update(_re.findall(r"[A-Za-z][A-Za-z0-9_.]*-\d+", ln))
+    for i, e in enumerate(spec["edges"]):
+        if e["type"] in ("trace", "allocate", "verify", "satisfy"):
+            target = e.get("ref")
+            if not target and e.get("label"):
+                target = e["label"].strip().split()[0].strip(",;:")
+            if not target:
+                out.append(issue(gate, f"edges[{i}]",
+                                 f"{e['type']} edge has no target id",
+                                 "set 'ref' (or start the label with the target id, e.g. 'REQ-014')"))
+            elif target not in known:
+                out.append(issue(gate, f"edges[{i}].ref",
+                                 f"{e['type']} target '{target}' does not resolve to an element, a source, "
+                                 "or an id named in the spec",
+                                 "add the target to 'sources', name it in a compartment, or fix 'ref'"))
     return out
 
 

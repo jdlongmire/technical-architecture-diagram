@@ -3,11 +3,21 @@
 // Interface ids (IF-01, ...) are assigned automatically unless you set "id". Power edges get no id.
 // Edge types: interface, bidir (two-way), control (dashed), power, physical.
 // Each edge label is at most 3 lines: id + label, data, protocol/port. Keep each line short.
+// Provenance is strict by default for this kind (reference/provenance_profile.md): fill the
+// id/owner/status fields below, and give external elements "owner" and "source_ref".
 {
   "title": "<<System>> Interfaces",
   "subtitle": "<<Scope of the interfaces shown>>",
   "kind": "interface",
   "marking": "<<UNCLASSIFIED or delete>>",
+  "id": "<<Diagram id>>",
+  "context": "<<Program or system this diagram belongs to>>",
+  "owner": "<<Accountable owner>>",
+  "version": "0.1",
+  "status": "draft",
+  "sources": [
+    {"id": "<<ICD or source id>>", "title": "<<Source title>>"}
+  ],
   "containers": [
     {"id": "sys_a", "label": "<<System A>>", "type": "system", "nodes": [
       {"id": "a1", "label": "<<Unit A1>>", "stereotype": "subsystem", "ports": ["CMD:E", "TLM:E"]},

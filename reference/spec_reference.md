@@ -13,6 +13,14 @@ Numeric limits are not repeated here. See `reference/limits.md` or run `python3 
 | `kind` | yes | `network`, `interface`, `dataflow`, `bdd` or `ibd`. Sets the default edge types, shapes and direction. |
 | `direction` | no | `RIGHT`, `DOWN` or `AUTO` (default for every kind except `bdd`). |
 | `marking` | no | Page banner text, top and bottom, e.g. `UNCLASSIFIED` or `CUI`. Drawn as given. |
+| `id` | no | Stable diagram identifier (provenance profile). Required in strict mode. |
+| `context` | no | Package, system, or program the diagram belongs to. Drawn in the frame header: `tad [kind] [context] [title]`. |
+| `owner` | no | Person or organization accountable for the diagram. Required in strict mode. |
+| `version` | no | Diagram version, drawn as a header chip. |
+| `status` | no | `draft`, `review`, or `approved`. Drawn as a header chip. Required in strict mode. |
+| `provenance` | no | `light` or `strict` (provenance profile). Defaults to `strict` for `interface` and `dataflow`, `light` otherwise. |
+| `sources` | no | Authority references: a list of `{"id", "title"}` objects (or plain id strings). Embedded in the .drawio file; `trace` targets resolve against it. |
+| `notes` | no | Rationale/problem notes: `{"id", "kind" (rationale\|problem), "anchor" (element id), "text", "show"}`. Drawn in a notes panel only when `show` is true. |
 | `page` | no | `auto` (default), `letter`, `legal`, `tabloid`, `a4`, `a3`, `a2`. With a fixed page, the PDF is scaled to fit and the checker fails the build if the scale would drop below the minimum. |
 | `containers` | no | Boundaries and groups (see below). |
 | `nodes` | yes | Components (see below). Nodes can also be listed inside containers. |
@@ -36,6 +44,8 @@ Numeric limits are not repeated here. See `reference/limits.md` or run `python3 
 | `containers`, `nodes` | Children (nested style). Flat and nested styles can be mixed. |
 | `stereotype` | Shown before the label in guillemets. |
 | `marking` | Badge in the header's top-right corner. A `classification` container takes its border colour from it. |
+| `owner` | Accountable organization or person. Drawn in the header in strict mode. |
+| `source_ref` | Id of a top-level `sources` entry, or a direct reference id. Drawn after the label in the header. |
 
 An item in a `containers` list that has node fields (`shape`, `ports`, `detail`, compartments, `icon`) and no children is read as a node.
 
@@ -52,6 +62,8 @@ An item in a `containers` list that has node fields (`shape`, `ports`, `detail`,
 | `values`, `parts`, `references`, `operations`, `constraints` | Compartments (lists of strings), drawn in that order under the label. `attributes` is read as `values`. |
 | `marking` | Portion mark in front of the label, e.g. `(CUI)`. |
 | `icon` | Icon name (used only when top-level `icons` is true). |
+| `owner` | Accountable organization or person. Drawn under the detail line in strict mode. Required on `external` elements in strict mode. |
+| `source_ref` | Id of a top-level `sources` entry, or a direct reference id. Drawn with the stereotype line, e.g. «source» ICD-04. Required on `external` elements in strict mode. |
 
 ## Edges
 
@@ -64,6 +76,7 @@ An item in a `containers` list that has node fields (`shape`, `ports`, `detail`,
 | `protocol`, `port` | Shown as `protocol/port` on the last line. |
 | `id` | Interface id. Assigned automatically (`IF-01`, ...) in `interface` diagrams; power edges get none. |
 | `marking` | Portion mark in front of the first label line. |
+| `ref` | Target id for the provenance edge types (`trace`, `allocate`, `verify`, `satisfy`, available in every kind): a source id, an element id, or an id named in the spec (e.g. in a compartment). Without `ref`, the first word of the label is read as the target. |
 | `dashed` | `true` draws this one edge dashed regardless of its type. |
 
 Write edges in the direction the flow starts, and list nodes and containers roughly in flow order: the layout follows spec order. An edge that closes a loop (between nodes, or between their containers) is laid out reversed so the main flow stays one-directional; its arrowheads still show the real direction, and the report lists it as a note. For a link that is genuinely two-way, use one edge with a two-way type (`tunnel`, `bidir`) instead of two opposite edges.

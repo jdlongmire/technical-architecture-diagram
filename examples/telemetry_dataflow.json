@@ -3,13 +3,25 @@
   "subtitle": "Fictional data flow across trust and classification boundaries, for a security review",
   "kind": "dataflow",
   "marking": "CUI",
+  "id": "TAD-EX-DF-001",
+  "context": "Mission operations (fictional example)",
+  "owner": "Mission operations (example)",
+  "version": "1.0",
+  "status": "approved",
+  "sources": [
+    {"id": "SEC-REV-001", "title": "Security review baseline (fictional)"}
+  ],
+  "notes": [
+    {"id": "R-1", "kind": "rationale", "anchor": "release",
+     "text": "Every product passes release review before it leaves the operations enclave.", "show": true}
+  ],
   "containers": [
     {"id": "untrusted", "label": "Public Network", "type": "trust", "nodes": [
-      {"id": "analyst", "label": "Partner Analyst", "shape": "external"},
+      {"id": "analyst", "label": "Partner Analyst", "shape": "external", "owner": "Partner organization (example)", "source_ref": "SEC-REV-001"},
       {"id": "portal", "label": "Data Portal", "stereotype": "web app"}
     ]},
     {"id": "corp", "label": "Corporate Network", "type": "trust", "nodes": [
-      {"id": "idp", "label": "Identity Provider", "shape": "external"},
+      {"id": "idp", "label": "Identity Provider", "shape": "external", "owner": "Corporate IT (example)", "source_ref": "SEC-REV-001"},
       {"id": "release", "label": "Release Review", "stereotype": "process"},
       {"id": "pubstore", "label": "Released Products", "shape": "store"}
     ]},
@@ -27,7 +39,7 @@
       ]},
       {"id": "operator", "label": "Flight Operator", "shape": "actor"}
     ]},
-    {"id": "gs", "label": "Ground Station", "shape": "external"}
+    {"id": "gs", "label": "Ground Station", "shape": "external", "owner": "Ground segment operator (example)", "source_ref": "SEC-REV-001"}
   ],
   "edges": [
     {"from": "gs", "to": "ingest", "data": "Telemetry frames", "protocol": "TLS 1.3", "port": "5001", "marking": "CUI"},

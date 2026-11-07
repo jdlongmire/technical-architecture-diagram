@@ -138,6 +138,47 @@ def normalize(raw):
     if m:
         spec["marking"] = str(m).strip()
 
+    # Provenance metadata (reference/provenance_profile.md): the digital title block.
+    for key in ("id", "context", "owner", "version"):
+        v = _pick(raw, [key], fixes, "spec", key)
+        if v not in (None, ""):
+            spec[key] = str(v).strip()
+    stv = _pick(raw, ["status"], fixes, "spec", "status")
+    if stv not in (None, ""):
+        s = str(stv).strip().lower()
+        if s not in ("draft", "review", "approved"):
+            issues.append(issue("ERROR", "status", f"unknown status '{stv}'",
+                                "use draft, review or approved"))
+        else:
+            spec["status"] = s
+    pv = raw.get("provenance")
+    if pv not in (None, ""):
+        p = str(pv).strip().lower()
+        if p not in ("light", "strict"):
+            issues.append(issue("ERROR", "provenance", f"unknown provenance level '{pv}'",
+                                "use light or strict"))
+            p = "light"
+        spec["provenance"] = p
+    else:
+        spec["provenance"] = "strict" if kind_s in ("interface", "dataflow") else "light"
+        spec["provenance_default"] = True
+    sources = []
+    for j, sitem in enumerate(_as_list(raw.get("sources"))):
+        if isinstance(sitem, str):
+            sources.append(OrderedDict(id=sitem.strip(), title=""))
+        elif isinstance(sitem, dict):
+            sid = sitem.get("id") or sitem.get("ref")
+            if not sid:
+                issues.append(issue("WARNING", f"sources[{j}]", "source has no id and is dropped",
+                                    "give each source an 'id' (and optionally a 'title')"))
+                continue
+            sources.append(OrderedDict(id=str(sid).strip(),
+                                       title=str(sitem.get("title") or sitem.get("name") or "")))
+        else:
+            issues.append(issue("WARNING", f"sources[{j}]", "source must be a string or an object"))
+    if sources:
+        spec["sources"] = sources
+
     page = str(raw.get("page", "auto")).strip().lower().replace(" ", "")
     if page not in S.PAGE_SIZES:
         issues.append(issue("ERROR", "page", f"unknown page size '{page}'",
@@ -204,6 +245,10 @@ def normalize(raw):
             cc["stereotype"] = str(st).strip("«»<> ")
         if c.get("marking"):
             cc["marking"] = str(c["marking"]).strip()
+        for key in ("owner", "source_ref"):
+            v = _pick(c, [key], fixes, path, key)
+            if v not in (None, ""):
+                cc[key] = str(v).strip()
         containers.append(cc)
         for j, sub_c in enumerate(_as_list(c.get("containers") or c.get("groups") or c.get("children_containers"))):
             walk_container(sub_c, f"{path}.containers[{j}]", cc["id"])
@@ -301,6 +346,10 @@ def normalize(raw):
             nn["icon"] = str(n["icon"])
         if n.get("marking"):
             nn["marking"] = str(n["marking"]).strip()
+        for key in ("owner", "source_ref"):
+            v = _pick(n, [key], fixes, path, key)
+            if v not in (None, ""):
+                nn[key] = str(v).strip()
         nodes.append(nn)
 
     for i, c in enumerate(_as_list(raw.get("containers") or raw.get("groups") or raw.get("boundaries"))):
@@ -437,6 +486,7 @@ def normalize(raw):
                            ("data", ["data", "payload", "message", "item", "items"]),
                            ("protocol", ["protocol", "proto"]),
                            ("port", ["port", "tcp", "udp", "port_number"]),
+                           ("ref", ["ref", "target_ref", "target_id"]),
                            ("marking", ["marking", "classification"])):
             v = _pick(e, names, fixes, path, key)
             if v not in (None, ""):
@@ -504,6 +554,38 @@ def normalize(raw):
     if views:
         spec["views"] = views
 
+    # Rationale / problem notes (provenance profile): model data, drawn only when show is true.
+    notes = []
+    for i, nt in enumerate(_as_list(raw.get("notes"))):
+        path = f"notes[{i}]"
+        if not isinstance(nt, dict):
+            issues.append(issue("INVALID", path, "note must be an object"))
+            continue
+        nn2 = OrderedDict()
+        nn2["id"] = str(nt.get("id") or f"N-{i + 1}")
+        nk = str(nt.get("kind") or "rationale").strip().lower()
+        if nk not in ("rationale", "problem"):
+            issues.append(issue("WARNING", path + ".kind", f"unknown note kind '{nk}', read as rationale",
+                                "use rationale or problem"))
+            nk = "rationale"
+        nn2["kind"] = nk
+        anchor = nt.get("anchor") or nt.get("about") or nt.get("target")
+        if anchor is not None:
+            t = resolve(anchor)
+            if t is None:
+                lvl = "ERROR" if spec["provenance"] == "strict" else "WARNING"
+                issues.append(issue(lvl, path + ".anchor", f"anchor '{anchor}' does not match any element id",
+                                    "set 'anchor' to a node or container id"))
+                nn2["anchor"] = str(anchor)
+            else:
+                nn2["anchor"] = t["id"]
+        nn2["text"] = str(nt.get("text") or "")
+        if nt.get("show"):
+            nn2["show"] = True
+        notes.append(nn2)
+    if notes:
+        spec["notes"] = notes
+
     if not nodes:
         issues.append(issue("INVALID", "nodes", "the spec has no nodes", "add at least one node"))
     return spec, fixes, issues
@@ -511,7 +593,7 @@ def normalize(raw):
 
 def _keep_rest(ee, e):
     """Keep the descriptive fields of an edge that failed to resolve, so the clean spec still holds it."""
-    for k in ("type", "id", "label", "data", "protocol", "port", "marking"):
+    for k in ("type", "id", "label", "data", "protocol", "port", "marking", "ref"):
         if e.get(k) not in (None, "") and k not in ee:
             ee[k] = str(e[k])
     return ee
@@ -566,11 +648,15 @@ def content_checks(spec):
 
     for i, c in enumerate(spec["containers"]):
         chk(f"containers[{i}].label", c["label"], L.CONTAINER_LABEL_MAX_CHARS, "container label", "it")
+        chk(f"containers[{i}].owner", c.get("owner"), L.DETAIL_MAX_CHARS, "owner", "it")
+        chk(f"containers[{i}].source_ref", c.get("source_ref"), L.DETAIL_MAX_CHARS, "source ref", "it")
     for i, n in enumerate(spec["nodes"]):
         p = f"nodes[{i}]"
         chk(p + ".label", n["label"], L.NODE_LABEL_MAX_CHARS, "label", "it")
         chk(p + ".stereotype", n.get("stereotype"), L.STEREOTYPE_MAX_CHARS, "stereotype", "it")
         chk(p + ".detail", n.get("detail"), L.DETAIL_MAX_CHARS, "detail", "it")
+        chk(p + ".owner", n.get("owner"), L.DETAIL_MAX_CHARS, "owner", "it")
+        chk(p + ".source_ref", n.get("source_ref"), L.DETAIL_MAX_CHARS, "source ref", "it")
         for k, pt in enumerate(n.get("ports", [])):
             chk(f"{p}.ports[{k}].label", pt["label"], L.PORT_LABEL_MAX_CHARS, "port label", "it")
         total = 0
@@ -595,7 +681,8 @@ def content_checks(spec):
         elif isinstance(x, list):
             for k, v in enumerate(x):
                 scan(v, f"{path}[{k}]")
-    for key in ("title", "subtitle", "marking", "edges", "views"):
+    for key in ("title", "subtitle", "marking", "edges", "views",
+                "id", "context", "owner", "version", "sources", "notes"):
         if key in spec:
             scan(spec[key], key)
     for i, e in enumerate(spec["edges"]):

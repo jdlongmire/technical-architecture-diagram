@@ -48,6 +48,10 @@ Boxes grow to fit their text, so these limits do not depend on the layout.
 | `tunnel` | Encrypted tunnel | dashed | arrow | arrow |
 | `wireless` | Wireless / RF | dotted | none | none |
 | `mgmt` | Management | dashed | none | arrow |
+| `trace` | Trace (to authority) | dashed | none | open |
+| `allocate` | Allocate | dashed | none | open |
+| `verify` | Verify | dashed | none | open |
+| `satisfy` | Satisfy | dashed | none | open |
 
 Default type: `link`.
 
@@ -60,6 +64,10 @@ Default type: `link`.
 | `control` | Command / control | dashed | none | arrow |
 | `power` | Power | none | none | arrow |
 | `physical` | Physical connection | none | none | none |
+| `trace` | Trace (to authority) | dashed | none | open |
+| `allocate` | Allocate | dashed | none | open |
+| `verify` | Verify | dashed | none | open |
+| `satisfy` | Satisfy | dashed | none | open |
 
 Default type: `interface`.
 
@@ -70,6 +78,10 @@ Default type: `interface`.
 | `flow` | Data flow | none | none | arrow |
 | `control` | Control flow | dashed | none | arrow |
 | `crossing` | Crosses a trust boundary | none | none | arrow |
+| `trace` | Trace (to authority) | dashed | none | open |
+| `allocate` | Allocate | dashed | none | open |
+| `verify` | Verify | dashed | none | open |
+| `satisfy` | Satisfy | dashed | none | open |
 
 Default type: `flow`.
 
@@ -82,6 +94,10 @@ Default type: `flow`.
 | `generalization` | Generalization (kind of) | none | none | triangle |
 | `association` | Association | none | none | none |
 | `dependency` | Dependency | dashed | none | open |
+| `trace` | Trace (to authority) | dashed | none | open |
+| `allocate` | Allocate | dashed | none | open |
+| `verify` | Verify | dashed | none | open |
+| `satisfy` | Satisfy | dashed | none | open |
 
 Default type: `association`.
 
@@ -92,6 +108,10 @@ Default type: `association`.
 | `flow` | Item flow | none | none | arrow |
 | `connector` | Connector | none | none | none |
 | `binding` | Binding | dashed | none | none |
+| `trace` | Trace (to authority) | dashed | none | open |
+| `allocate` | Allocate | dashed | none | open |
+| `verify` | Verify | dashed | none | open |
+| `satisfy` | Satisfy | dashed | none | open |
 
 Default type: `connector`.
 

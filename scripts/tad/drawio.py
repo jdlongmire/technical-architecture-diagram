@@ -8,10 +8,11 @@ import base64
 import xml.etree.ElementTree as ET
 from html import escape as hesc
 
+from . import __version__
 from . import limits as L
 from . import styles as S
 from .geom import nearest_on_path
-from .layout import BANNER_H, MARGIN, ICON, PAD_X
+from .layout import BANNER_H, MARGIN, ICON, PAD_X, FRAME_H
 from .svg import icon_markup
 
 ARROWS = {
@@ -42,8 +43,10 @@ def _dash(d, w):
 
 
 class Page:
-    def __init__(self, name, w, h):
+    def __init__(self, name, w, h, meta=None):
         self.diagram = ET.Element("diagram", name=name, id=_safe_id(name))
+        for k, v in (meta or {}).items():
+            self.diagram.set("tad_" + k, str(v))
         self.model = ET.SubElement(self.diagram, "mxGraphModel", dx="0", dy="0", grid="1", gridSize="10",
                                    guides="1", tooltips="1", connect="1", arrows="1", fold="1", page="1",
                                    pageScale="1", pageWidth=str(w), pageHeight=str(h), math="0", shadow="0")
@@ -89,7 +92,7 @@ def _safe_id(s):
 def page_from_scene(sc):
     th = sc["theme"]
     W, H = sc["width"], sc["height"]
-    pg = Page(sc["name"], W, H)
+    pg = Page(sc["name"], W, H, sc.get("meta"))
 
     def bare(kind, **kw):
         """Style dict that starts with a bare shape keyword (e.g. 'text')."""
@@ -106,18 +109,31 @@ def page_from_scene(sc):
                        "fontColor": _h(fg), "fontStyle": 1, "fontSize": L.FONT_BANNER, "fontFamily": th["font"],
                        "align": "center", "verticalAlign": "middle", "locked": 1}, 0, by, W, BANNER_H)
         y0 += BANNER_H
+    fh = FRAME_H if sc.get("frame") else 0
+    if sc.get("frame"):
+        pg.vertex("frame", hesc(sc["frame"]),
+                  bare("text", html=1, align="left", verticalAlign="top", fontSize=11, fontStyle=1,
+                       fontFamily=th["font"], fontColor=_h(th["muted"]), whiteSpace="nowrap"),
+                  MARGIN, y0 - 4, max(300, sc["title_w"] + 200), 15)
     pg.vertex("title", hesc(sc["title"]),
               bare("text", html=1, align="left", verticalAlign="top", fontSize=L.FONT_TITLE, fontStyle=1,
                    fontFamily=th["font"], fontColor=_h(th["title"]), whiteSpace="nowrap"),
-              MARGIN, y0 - 4, max(200, sc["title_w"] + 20), L.FONT_TITLE + 10)
+              MARGIN, y0 - 4 + fh, max(200, sc["title_w"] + 20), L.FONT_TITLE + 10)
+    sub_y = y0 + fh + L.FONT_TITLE + 8
     if sc.get("subtitle"):
         pg.vertex("subtitle", hesc(sc["subtitle"]),
                   bare("text", html=1, align="left", verticalAlign="top", fontSize=L.FONT_SUBTITLE,
                        fontFamily=th["font"], fontColor=_h(th["muted"]), whiteSpace="nowrap"),
-                  MARGIN, y0 + L.FONT_TITLE + 8, max(300, sc["title_w"] + 200), L.FONT_SUBTITLE + 8)
+                  MARGIN, sub_y, max(300, sc["title_w"] + 200), L.FONT_SUBTITLE + 8)
+    if sc.get("chips"):
+        pg.vertex("chips", hesc(sc["chips"]),
+                  bare("text", html=1, align="left", verticalAlign="top", fontSize=L.FONT_DETAIL,
+                       fontFamily=th["font"], fontColor=_h(th["muted"]), whiteSpace="nowrap"),
+                  MARGIN, sub_y + (L.FONT_SUBTITLE + 6 if sc.get("subtitle") else 4),
+                  max(300, sc["title_w"] + 200), L.FONT_DETAIL + 6)
     pg.vertex("viewname", "View: " + hesc(sc["name"]),
               bare("text", html=1, align="right", verticalAlign="top", fontSize=11, fontFamily=th["font"],
-                   fontColor=_h(th["muted"])), W - MARGIN - 260, y0 + 6, 260, 18)
+                   fontColor=_h(th["muted"])), W - MARGIN - 260, y0 + fh + 6, 260, 18)
 
     if sc.get("table"):
         _table(pg, sc, th)
@@ -135,6 +151,12 @@ def page_from_scene(sc):
             label += f'<i style="font-weight:normal;font-size:{L.FONT_STEREO}px;color:{_h(th["muted"])}">' \
                      f'«{hesc(c["stereotype"])}»</i> '
         label += f"<b>{hesc(c['label'])}</b>"
+        if c.get("source_ref"):
+            label += f' <span style="font-size:{L.FONT_STEREO}px;color:{_h(th["accent"])}">' \
+                     f'{hesc(c["source_ref"])}</span>'
+        if c.get("owner") and (sc.get("meta") or {}).get("provenance") == "strict":
+            label += f' <span style="font-size:{L.FONT_STEREO}px;color:{_h(th["muted"])}">' \
+                     f'· {hesc(c["owner"])}</span>'
         st = {"rounded": 1, "arcSize": 2, "absoluteArcSize": 1, "html": 1, "whiteSpace": "wrap", "container": 1,
               "collapsible": 0, "recursiveResize": 0, "fillColor": _h(c["fill"]), "strokeColor": _h(c["stroke"]),
               "strokeWidth": c["width"], "verticalAlign": "top", "align": "left", "spacingLeft": 10,
@@ -223,6 +245,14 @@ def page_from_scene(sc):
 
     if sc.get("legend"):
         _legend(pg, sc["legend"], th)
+    if sc.get("notes_box"):
+        nb = sc["notes_box"]
+        value = "<b>Notes</b><br>" + "<br>".join(hesc(x) for x in nb["lines"])
+        pg.vertex("notes", value,
+                  {"rounded": 1, "arcSize": 3, "absoluteArcSize": 1, "html": 1, "whiteSpace": "wrap",
+                   "fillColor": "#FFFBEA", "strokeColor": "#CBD2D9", "verticalAlign": "top", "align": "left",
+                   "spacingLeft": 8, "spacingTop": 2, "fontSize": L.FONT_LEGEND, "fontFamily": th["font"],
+                   "fontColor": _h(th["text"])}, nb["x"], nb["y"], nb["w"], nb["h"])
     return pg.diagram
 
 
@@ -355,7 +385,8 @@ def _table(pg, sc, th):
 
 
 def write(scenes, path):
-    mx = ET.Element("mxfile", host="technical-architecture-diagram", agent="tad 0.1", version="24.0.0", type="device")
+    mx = ET.Element("mxfile", host="technical-architecture-diagram", agent=f"tad {__version__}",
+                    version="24.0.0", type="device")
     for sc in scenes:
         mx.append(page_from_scene(sc))
     tree = ET.ElementTree(mx)
