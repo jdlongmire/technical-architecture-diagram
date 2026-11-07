@@ -46,10 +46,10 @@ python3 scripts/make_tad.py --limits     # every enforced limit, edge type, cont
 ## Author
 
 James D. (JD) Longmire\
-Senior Technical Fellow, Aerospace and Defense Sector\
+Senior Technical Fellow — Aerospace & Defense Sector\
 Independent Researcher\
 ORCID: 0009-0009-1383-7698\
-Correspondence: jd.longmire@ologos.co
+Correspondence: jdlongmire@outlook.com
 
 ## License
 
